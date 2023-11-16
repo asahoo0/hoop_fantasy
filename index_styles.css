@@ -1,11 +1,16 @@
 body {
-    
+    background-color:rgb(244,244,244);
 }
 
 #main_box {
     width: 500px;
-    height: 700px;
-    background-color: gray;
-    margin:0 auto;
-    border: 2px solid black;
+    height: 650px;
+    background-color: rgb(255,255,255);
+    margin:20 auto;
+    border-radius: 5px;
+
+}
+
+.title_section {
+    text-align: center;
 }
