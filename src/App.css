@@ -1,0 +1,117 @@
+/* App.css */
+body {
+  background-color: #282c34;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+#main_box {
+  width: 400px;
+  padding: 20px;
+  background-color: #373d48;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title_section {
+  font-size: 24px;
+  color: #61dafb;
+  margin-bottom: 20px;
+}
+
+.user_input {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+}
+
+.user_input_container {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav_container {
+  margin-top: 20px;
+}
+
+.nav_list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+}
+
+.nav_item {
+  margin: 0 10px;
+}
+
+.nav_link {
+  text-decoration: none;
+  color: #61dafb;
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.nav_link:hover,
+.nav_link.active {
+  color: #4caf50;
+}
+
+.button_container {
+  margin-top: 20px;
+  display: flex;
+}
+
+.button_separator {
+  margin: 0 10px;
+  font-size: 18px;
+  color: #61dafb;
+}
+
+.sign {
+  width: 100%;
+  height: 45px;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: #61dafb;
+  color: white;
+}
+
+#in {
+  background-color: #4caf50;
+  color: white;
+}
+
+#up {
+  background-color: #333;
+  color: white;
+}
+
+input {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 15px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+label {
+  margin-bottom: 8px;
+  color: #61dafb;
+}
