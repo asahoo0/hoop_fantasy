@@ -1,4 +1,3 @@
-// YourLeagues.js
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase'; // Adjust the path accordingly
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -15,11 +14,11 @@ const YourLeagues = () => {
           return;
         }
 
-        const userEmail = user.email;
+        const userUID = user.uid;
 
         // Query the Firestore database to get leagues where the user is a participant
         const leaguesCollectionRef = collection(db, 'leagues');
-        const q = query(leaguesCollectionRef, where('participants', 'array-contains', userEmail));
+        const q = query(leaguesCollectionRef, where('participants', 'array-contains', userUID));
         const querySnapshot = await getDocs(q);
 
         const leagues = querySnapshot.docs.map((doc) => ({

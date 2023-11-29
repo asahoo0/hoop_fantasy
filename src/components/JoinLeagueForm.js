@@ -16,7 +16,7 @@ const JoinLeagueForm = () => {
         return;
       }
 
-      const userEmail = user.email;
+      const userUID = user.uid
 
       // Query the Firestore database to find the league with the given join code
       const leaguesCollectionRef = collection(db, 'leagues');
@@ -36,7 +36,7 @@ const JoinLeagueForm = () => {
       // Update the league document to add the user to the participants array
       const leagueRef = doc(db, 'leagues', leagueId);
       await updateDoc(leagueRef, {
-        participants: [...leagueDoc.data().participants, userEmail],
+        participants: [...leagueDoc.data().participants, userUID],
       });
 
       alert('You have joined the league successfully!');

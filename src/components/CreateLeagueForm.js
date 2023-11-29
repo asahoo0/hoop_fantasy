@@ -28,7 +28,7 @@ const CreateLeagueForm = () => {
         return;
       }
 
-      const creatorEmail = user.email;
+      const creatorUID = user.uid;
 
       // Generate a random join code
       const joinCode = generateJoinCode();
@@ -37,7 +37,7 @@ const CreateLeagueForm = () => {
 
       const newLeagueDocRef = await addDoc(leaguesCollectionRef, {
         name: leagueName,
-        participants: [creatorEmail],
+        participants: [creatorUID],
         joinCode: joinCode, // Include the join code in the league document
       });
 
