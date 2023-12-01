@@ -7,6 +7,10 @@ import './App.css';
 import CreateLeagueForm from './components/CreateLeagueForm';
 import JoinLeagueForm from './components/JoinLeagueForm';
 import YourLeagues from './components/YourLeagues';
+import PlayerList from './components/PlayerList';
+import CreateTeam from './components/CreateTeam';
+import LeagueDetails from './components/LeagueDetails';
+import AddToTeam from './components/AddToTeam'
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -76,6 +80,10 @@ const App = () => {
               <Route path="/create-league" element={<CreateLeagueForm />} />
               <Route path="/join-league" element={<JoinLeagueForm />} />
               <Route path="/your-leagues" element={<YourLeagues />} />
+              <Route path="/player-list/:leagueId" element={<PlayerList />} />
+              <Route path="/create-team/:leagueId" element={<CreateTeam />} />
+              <Route path="/league-details/:leagueId" element={<LeagueDetails />} />
+              <Route path="/add-to-team/:leagueId" element={<AddToTeam />} />
             </Routes>
           </div>
         ) : (

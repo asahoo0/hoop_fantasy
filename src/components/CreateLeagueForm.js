@@ -39,7 +39,9 @@ const CreateLeagueForm = () => {
         name: leagueName,
         participants: [creatorUID],
         joinCode: joinCode, // Include the join code in the league document
-        teams: []
+        teams: [],
+        draftStarted: false,
+        draftPos: 0
       });
 
       // Use alert to notify the user that the league was created

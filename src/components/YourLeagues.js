@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase'; // Adjust the path accordingly
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import { Link } from 'react-router-dom'; // Import Link from React Router
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const YourLeagues = () => {
   const [userLeagues, setUserLeagues] = useState([]);
+  const navigate = useNavigate(); // Initialize the useNavigate hook
 
   useEffect(() => {
     const fetchUserLeagues = async () => {
@@ -35,6 +38,12 @@ const YourLeagues = () => {
     fetchUserLeagues();
   }, []);
 
+  // Handle league click event
+  const handleLeagueClick = (leagueId) => {
+    // Use navigate to navigate to PlayerList.js with the leagueId as a route parameter
+    navigate(`/league-details/${leagueId}`);
+  };
+
   return (
     <div>
       <h2>Your Leagues</h2>
@@ -43,8 +52,10 @@ const YourLeagues = () => {
       ) : (
         <ul>
           {userLeagues.map((league) => (
-            <li key={league.id}>
-              <strong>{league.name}</strong>
+            <li key={league.id} onClick={() => handleLeagueClick(league.id)} style={{ cursor: 'pointer' }}>
+              <Link to={`/league-details/${league.id}`}>
+                <strong>{league.name}</strong>
+              </Link>
             </li>
           ))}
         </ul>
