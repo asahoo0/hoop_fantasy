@@ -31,6 +31,10 @@ app.use(bodyParser.json());
 
 // Use routes as a module (see index.js)
 require('./routes')(app, router);
+const leaguesRouter = require('./routes/leagues')
+const teamsRouter = require('./routes/teams')
+app.use('/api/leagues',leaguesRouter)
+app.use('/api/teams',teamsRouter)
 
 // Start the server
 app.listen(port);
