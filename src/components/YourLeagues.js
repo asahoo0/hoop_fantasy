@@ -18,7 +18,6 @@ const YourLeagues = () => {
 
         const userUID = user.uid;
 
-        // Replace this with your backend API endpoint to fetch user leagues
         const response = await fetch(`http://localhost:4000/api/leagues/userLeagues/${userUID}`, {
           method: 'GET',
           headers: {
@@ -32,6 +31,7 @@ const YourLeagues = () => {
         }
 
         const leagues = await response.json();
+        console.log('Retrieved Leagues:', leagues);
         setUserLeagues(leagues);
       } catch (error) {
         console.error('Error fetching user leagues:', error.message);
@@ -43,7 +43,8 @@ const YourLeagues = () => {
 
   // Handle league click event
   const handleLeagueClick = (leagueId) => {
-    // Use navigate to navigate to PlayerList.js with the leagueId as a route parameter
+    console.log(userLeagues)
+    console.log('Clicked on leagueId:', leagueId);
     navigate(`/league-details/${leagueId}`);
   };
 
@@ -55,7 +56,7 @@ const YourLeagues = () => {
       ) : (
         <ul>
           {userLeagues.map((league) => (
-            <li key={league.id} onClick={() => handleLeagueClick(league.id)} style={{ cursor: 'pointer' }}>
+            <li key={league._id} onClick={() => handleLeagueClick(league._id)} style={{ cursor: 'pointer' }}>
               <Link to={`/league-details/${league.id}`}>
                 <strong>{league.name}</strong>
               </Link>
