@@ -1,48 +1,102 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { db, auth } from '../firebase';
-import { collection, addDoc, getDoc, updateDoc, doc } from 'firebase/firestore';
+import { auth } from '../firebase';
 
 const CreateTeam = () => {
   const { leagueId } = useParams();
   const [teamName, setTeamName] = useState('');
-  const [players, setPlayers] = useState('');
+  const [player, setPlayer] = useState('');
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
   const navigate = useNavigate();
 
   const handleCreateTeam = async () => {
     try {
-      // Convert player IDs to integers
-      const playerIds = players.split(',').map(player => parseInt(player.trim(), 10));
-  
-      // Check if there are duplicate player IDs
-      if (hasDuplicates(playerIds)) {
-        alert('Duplicate player IDs detected. Please enter unique player IDs.');
+      // Validate player input
+      if (!player) {
+        alert('Please enter a player ID.');
+        return;
+      }
+
+      // Fetch all teams in the league
+      const leagueTeamsResponse = await fetch(`http://localhost:4000/api/leagues/${leagueId}`);
+      if (!leagueTeamsResponse.ok) {
+        console.error('Error fetching league teams:', leagueTeamsResponse.statusText);
         return;
       }
   
-      // Create a new team
-      const teamsCollectionRef = collection(db, 'teams');
-      const newTeamRef = await addDoc(teamsCollectionRef, {
-        name: teamName,
-        players: playerIds,
-        league_id: leagueId,
-        user_id: userId,
+      const leagueTeamsData = await leagueTeamsResponse.json();
+      const playersList = leagueTeamsData.data.players;
+      console.log(playersList)
+  
+      // Check for duplicate player ID in other teams in the league
+      if (checkDuplicatePlayerInLeague(playersList, player)) {
+        alert('Player ID already exists in another team in the league. Please enter a unique player ID.');
+        return;
+      }
+  
+      // Make a request to your backend API to create a new team
+      const response = await fetch('http://localhost:4000/api/teams', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: teamName,
+          players: [player], // Ensure only one player is added
+          league_id: leagueId,
+          user_id: userId,
+          score: 0,
+          // Add any other fields you need based on your Mongoose schema
+        }),
       });
   
-      const newTeamId = newTeamRef.id;
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`Error creating team: ${errorData.message}`);
+        return;
+      }
   
-      // Fetch existing teams array from the league document
-      const leaguesCollectionRef = collection(db, 'leagues');
-      const leagueDocRef = doc(leaguesCollectionRef, leagueId);
-      const leagueDoc = await getDoc(leagueDocRef);
-      const existingTeams = leagueDoc.data().teams || []; // Use the existing teams array, default to an empty array if not present
+      // Extract the team ID from the response
+      const teamData = await response.json();
+      const newTeamId = teamData.data._id; // Adjust based on your actual response structure
   
-      // Update the league document to include the new team's ID in the teams array
-      await updateDoc(leagueDocRef, {
-        teams: [...existingTeams, newTeamId],
+      // Make a request to update the league document with the new team's ID
+      await fetch(`http://localhost:4000/api/leagues/${leagueId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          teams: [newTeamId]
+        }),
       });
+  
+      // Fetch league details to get the updated turn
+      const leagueResponse = await fetch(`http://localhost:4000/api/leagues/${leagueId}`);
+      if (!leagueResponse.ok) {
+        console.error('Error fetching league details:', leagueResponse.statusText);
+        return;
+      }
+  
+      const leagueData = await leagueResponse.json();
+      const turn = leagueData.data.turn;
+      const user_ids = leagueData.data.user_ids; 
+      console.log((turn + 1) % user_ids.length)
+      // Update the turn based on your conditions
+      if (turn < user_ids.length) {
+        // Make a request to update the league document with the new turn
+        await fetch(`http://localhost:4000/api/leagues/${leagueId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            turn: (turn + 1) % user_ids.length,
+            players: [...leagueData.data.players,player]
+          }),
+        });
+      }
   
       // Redirect to Your Leagues page or wherever you want after creating the team
       navigate('/your-leagues');
@@ -50,12 +104,17 @@ const CreateTeam = () => {
       console.error('Error creating team:', error.message);
     }
   };
-  
-  // Helper function to check for duplicate values in an array
-  const hasDuplicates = (array) => {
-    return new Set(array).size !== array.length;
+  // Helper function to check for duplicate player in all teams in the league
+  const checkDuplicatePlayerInLeague = (players, player) => {
+    for (const p of players) {
+      if (p === parseInt(player)) {
+        return true;
+      }
+    }
+    return false;
   };
   
+
   return (
     <div>
       <h1>Create Team</h1>
@@ -64,8 +123,8 @@ const CreateTeam = () => {
         <input type="text" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
       </label>
       <label>
-        Players (comma-separated):
-        <input type="text" value={players} onChange={(e) => setPlayers(e.target.value)} />
+        Player ID:
+        <input type="text" value={player} onChange={(e) => setPlayer(e.target.value)} />
       </label>
       <button onClick={handleCreateTeam}>Create Team</button>
     </div>
