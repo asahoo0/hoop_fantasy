@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { auth } from '../firebase'; // Adjust the path accordingly
 import { Link } from 'react-router-dom'; // Import Link from React Router
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { API_BASE_URL } from '../config';
 
 const YourLeagues = () => {
   const [userLeagues, setUserLeagues] = useState([]);
@@ -18,7 +19,7 @@ const YourLeagues = () => {
 
         const userUID = user.uid;
 
-        const response = await fetch(`http://localhost:4000/api/leagues/userLeagues/${userUID}`, {
+        const response = await fetch(`${API_BASE_URL}/api/leagues/userLeagues/${userUID}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
