@@ -6,7 +6,7 @@ var TeamSchema = new mongoose.Schema({
     name: {type: String, required:true},
     user_id: {type:String, required:true},
     league_id: {type:String, required: true},
-    players: {type:[String], default:[]},
+    players: {type:[Number], default:[]},
     score: {type: Number, default: 0}
 }, {versionKey: false});
 

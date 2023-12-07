@@ -2,57 +2,70 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase';
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import NavBar from "./NavBar"
 
 const LeagueDetails = () => {
   const { leagueId } = useParams();
-  const [userTeams, setUserTeams] = useState([]);
-  const [draftStarted, setDraftStarted] = useState(false); // State to track if the draft has started
+  const [team, setTeamExists] = useState(false);
+  const [draftStarted, setDraftStarted] = useState(false);
+  const [isUserTurn, setIsUserTurn] = useState(false);
+  const [draftEnded, setDraftEnded] = useState(false); // New state for draft end
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserTeams = async () => {
+    const fetchData = async () => {
       try {
-        const teamsCollectionRef = collection(db, 'teams');
-        const userTeamsQuery = query(teamsCollectionRef, where('user_id', '==', userId));
-        const teamsSnapshot = await getDocs(userTeamsQuery);
-        const teams = teamsSnapshot.docs.map((doc) => doc.data());
-
-        // Filter teams to only include those in the specified league
-        const teamsInLeague = teams.filter((team) => team.league_id === leagueId);
-
-        setUserTeams(teamsInLeague);
-      } catch (error) {
-        console.error('Error fetching user teams:', error.message);
-      }
-    };
-
-    const fetchLeagueDetails = async () => {
-      try {
-        const leaguesCollectionRef = collection(db, 'leagues');
-        const leagueDoc = doc(leaguesCollectionRef, leagueId);
-        const leagueSnapshot = await getDoc(leagueDoc);
-        
-        if (leagueSnapshot.exists()) {
-          const leagueData = leagueSnapshot.data();
-          setDraftStarted(leagueData.draftStarted || false); // Assuming draftStarted is a boolean field
+        const draftResponse = await fetch(`http://localhost:4000/api/leagues/${leagueId}`);
+        if (!draftResponse.ok) {
+          console.error('Error fetching league details:', draftResponse.start);
+          return;
         }
+
+        const draftData = await draftResponse.json();
+        setDraftStarted(draftData.data.start || false);
+        setDraftEnded(draftData.data.end || false); // Update draftEnded state
+
+        const isUserTurn = draftData.data.user_ids && draftData.data.user_ids[draftData.data.turn] === userId;
+        setIsUserTurn(isUserTurn);
+
+        const teamsResponse = await fetch(`http://localhost:4000/api/teams/userTeam/${userId}/${leagueId}`);
+        if (!teamsResponse.ok) {
+          console.error('Error fetching user teams:', teamsResponse.statusText);
+          return;
+        }
+
+        const teamsData = await teamsResponse.json();
+        const userTeamInLeague = teamsData.data;
+        setTeamExists(!!userTeamInLeague);
       } catch (error) {
-        console.error('Error fetching league details:', error.message);
+        console.error('Error fetching data:', error.message);
       }
     };
 
-    fetchUserTeams();
-    fetchLeagueDetails();
+    fetchData();
   }, [leagueId, userId]);
 
   const handleStartDraft = async () => {
     try {
-      const leaguesCollectionRef = collection(db, 'leagues');
-      const leagueDocRef = doc(leaguesCollectionRef, leagueId);
+      if (draftStarted) {
+        console.log('Draft has already started.');
+        return;
+      }
 
-      await updateDoc(leagueDocRef, { draftStarted: true, draftStartDate: serverTimestamp() });
+      const response = await fetch(`http://localhost:4000/api/leagues/${leagueId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ start: true }),
+      });
+
+      if (!response.ok) {
+        console.error('Error starting draft:', response.statusText);
+        return;
+      }
 
       setDraftStarted(true);
     } catch (error) {
@@ -60,41 +73,78 @@ const LeagueDetails = () => {
     }
   };
 
+  const handleCreateTeam = () => {
+    navigate(`/create-team/${leagueId}`);
+  };
+
+  const handleAddPlayer = () => {
+    navigate(`/add-to-team/${leagueId}`);
+  };
+
   return (
     <div>
+      <NavBar />
+      <div className="main_item"> 
       <h2>League Details</h2>
-      {userTeams.length > 0 ? (
+      {team ? (
         <div>
           <p>You have a team in this league.</p>
-          {draftStarted ? (
-            <>
-              {/* Display additional league details if needed */}
-              <button onClick={() => navigate(`/add-to-team/${leagueId}`)}>Add to Team</button>
-            </>
+          {draftEnded ? (
+            <p>The draft has ended.</p>
           ) : (
-            <div>
-              <p>Draft has not started. You cannot add to the team.</p>
-              <button onClick={handleStartDraft}>Start Draft</button>
-            </div>
+            <>
+              {draftStarted ? (
+                isUserTurn ? (
+                  <button className="standard_button" onClick={handleAddPlayer}>Add a Player</button>
+                ) : (
+                  <div>
+                    <p>It's not your turn to draft.</p>
+                  </div>
+                )
+              ) : (
+                <div>
+                  <p>Draft has not started. You cannot add a player yet.</p>
+                  {isUserTurn && (
+                    <button className = "standard_button" onClick={handleStartDraft}>Start Draft</button>
+                  )}
+                </div>
+              )}
+            </>
           )}
           <button onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>
         </div>
       ) : (
         <div>
           <p>You don't have a team in this league.</p>
-          {draftStarted ? (
-            <>
-              <button onClick={() => navigate(`/create-team/${leagueId}`)}>Create Team</button>
-            </>
+          {draftEnded ? (
+            <p>The draft has ended.</p>
           ) : (
-            <div>
-              <p>Draft has not started. You cannot create a team.</p>
-              <button onClick={handleStartDraft}>Start Draft</button>
-            </div>
+            <>
+              {draftStarted ? (
+                isUserTurn ? (
+                  <>
+                    <p>Create a team with one player to get started.</p>
+                    <button className='standard_button' onClick={handleCreateTeam}>Create Team</button>
+                  </>
+                ) : (
+                  <div>
+                    <p>It's not your turn to draft.</p>
+                  </div>
+                )
+              ) : (
+                <div>
+                  <p>Draft has not started. You cannot create a team yet.</p>
+                  {(
+                    <button className='standard_button' onClick={handleStartDraft}>Start Draft</button>
+                  )}
+                </div>
+              )}
+            </>
           )}
-          <button onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>
+          <button className='standard_button'  onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>
         </div>
       )}
+      </div>
     </div>
   );
 };

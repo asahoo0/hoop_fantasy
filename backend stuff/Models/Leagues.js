@@ -8,8 +8,9 @@ var LeagueSchema = new mongoose.Schema({
     user_ids: {type: [String], default:[]},
     join_code: {type: String, required:true},
     start: {type: Boolean, default: false}, // indicates whether all payers are done signing up and draft can begin
-    draft: {type: Boolean, default: false}, // indicates whether or not draft is complete
-    players: {type:[String], default:[]} // intended to keep track of all currently chosen players
+    turn: {type: Number, default: 0}, // a position value indicating whose turn it is to pick a player
+    end: {type: Boolean, default: false}, // indicates whether or not draft is complete
+    players: {type:[Number], default:[]} // intended to keep track of all currently chosen players
 
 }, {versionKey: false});
 

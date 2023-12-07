@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { db, auth } from '../firebase'; // Adjust the path accordingly
+import { db, auth } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
+import NavBar from './NavBar';
 
-// Function to generate a random join code (for demonstration purposes)
 const generateJoinCode = () => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   const codeLength = 6;
@@ -19,53 +19,71 @@ const CreateLeagueForm = () => {
 
   const handleCreateLeague = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const user = auth.currentUser; // Get the current authenticated user
+      const user = auth.currentUser;
       if (!user) {
-        // Handle the case where the user is not authenticated
         alert('User not authenticated');
         return;
       }
-
+  
       const creatorUID = user.uid;
-
-      // Generate a random join code
       const joinCode = generateJoinCode();
-
-      const leaguesCollectionRef = collection(db, 'leagues');
-
-      const newLeagueDocRef = await addDoc(leaguesCollectionRef, {
-        name: leagueName,
-        participants: [creatorUID],
-        joinCode: joinCode, // Include the join code in the league document
-        teams: [],
-        draftStarted: false,
-        draftPos: 0
+  
+      const response = await fetch('http://localhost:4000/api/leagues', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: leagueName,
+          join_code: joinCode,
+        }),
       });
-
-      // Use alert to notify the user that the league was created
-      alert(`League created successfully with ID: ${newLeagueDocRef.id} and Join Code: ${joinCode}`);
-
-      // You can add additional logic or redirect the user after league creation
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`Error creating league: ${errorData.message}`);
+        return;
+      }
+  
+      const leagueData = await response.json();
+      const leagueID = leagueData.data._id;
+  
+      await fetch(`http://localhost:4000/api/leagues/${leagueID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_ids: [creatorUID],
+        }),
+      });
+  
+      alert(`League created successfully with ID: ${leagueID} and Join Code: ${joinCode}`);
     } catch (error) {
-      // Use alert to notify the user of any errors
       alert(`Error creating league: ${error.message}`);
     }
   };
+  
 
   return (
-    <form onSubmit={handleCreateLeague}>
-      <label>
-        League Name:
-        <input
-          type="text"
-          value={leagueName}
-          onChange={(e) => setLeagueName(e.target.value)}
-        />
-      </label>
-      <button type="submit">Create League</button>
-    </form>
+    <div>
+      <NavBar />
+      <div className='main_item'>
+        <form onSubmit={handleCreateLeague} className="league">
+          <label>
+            <span className="league_name_span">League Name:</span>
+            <input
+              type="text"
+              value={leagueName}
+              onChange={(e) => setLeagueName(e.target.value)}
+            />
+          </label>
+          <button className="league" type="submit">Create League</button>
+        </form>
+      </div>
+    </div>
   );
 };
 
