@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { auth } from '../firebase';
+import { db, auth } from '../firebase';
+import { collection, addDoc, getDoc, updateDoc, doc } from 'firebase/firestore';
+import NavBar from "./NavBar"
 
 const CreateTeam = () => {
   const { leagueId } = useParams();
@@ -117,6 +119,7 @@ const CreateTeam = () => {
 
   return (
     <div>
+      <NavBar />
       <h1>Create Team</h1>
       <label>
         Team Name:

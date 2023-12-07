@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { auth } from '../firebase';
+import { db, auth } from '../firebase';
+import { collection, query, where, getDocs, doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import NavBar from "./NavBar"
 
 const LeagueDetails = () => {
   const { leagueId } = useParams();
@@ -81,6 +83,8 @@ const LeagueDetails = () => {
 
   return (
     <div>
+      <NavBar />
+
       <h2>League Details</h2>
       {team ? (
         <div>

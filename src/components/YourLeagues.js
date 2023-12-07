@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { auth } from '../firebase'; // Adjust the path accordingly
 import { Link } from 'react-router-dom'; // Import Link from React Router
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import NavBar from "./NavBar"
 
 const YourLeagues = () => {
   const [userLeagues, setUserLeagues] = useState([]);
@@ -50,20 +51,23 @@ const YourLeagues = () => {
 
   return (
     <div>
-      <h2>Your Leagues</h2>
-      {userLeagues.length === 0 ? (
-        <p>You are not in any leagues.</p>
-      ) : (
-        <ul>
-          {userLeagues.map((league) => (
-            <li key={league._id} onClick={() => handleLeagueClick(league._id)} style={{ cursor: 'pointer' }}>
-              <Link to={`/league-details/${league.id}`}>
-                <strong>{league.name}</strong>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <NavBar />
+      <div className='main_item'>
+        <h2>Your Leagues</h2>
+        {userLeagues.length === 0 ? (
+          <p>You are not in any leagues.</p>
+        ) : (
+          <ul>
+            {userLeagues.map((league) => (
+              <li key={league.id} onClick={() => handleLeagueClick(league.id)} style={{ cursor: 'pointer' }}>
+                <Link to={`/league-details/${league.id}`}>
+                  <strong>{league.name}</strong>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };

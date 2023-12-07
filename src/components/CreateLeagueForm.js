@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { db, auth } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
+import NavBar from './NavBar';
 
 const generateJoinCode = () => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -67,17 +68,22 @@ const CreateLeagueForm = () => {
   
 
   return (
-    <form onSubmit={handleCreateLeague}>
-      <label>
-        League Name:
-        <input
-          type="text"
-          value={leagueName}
-          onChange={(e) => setLeagueName(e.target.value)}
-        />
-      </label>
-      <button type="submit">Create League</button>
-    </form>
+    <div>
+      <NavBar />
+      <div className='main_item'>
+        <form onSubmit={handleCreateLeague} className="league">
+          <label>
+            <span className="league_name_span">League Name:</span>
+            <input
+              type="text"
+              value={leagueName}
+              onChange={(e) => setLeagueName(e.target.value)}
+            />
+          </label>
+          <button className="league" type="submit">Create League</button>
+        </form>
+      </div>
+    </div>
   );
 };
 

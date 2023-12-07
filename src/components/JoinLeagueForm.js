@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { auth } from '../firebase'; // Adjust the path accordingly
+import NavBar from './NavBar';
 
 const JoinLeagueForm = () => {
   const [joinCode, setJoinCode] = useState('');
@@ -59,17 +60,22 @@ const JoinLeagueForm = () => {
   };
 
   return (
-    <form onSubmit={handleJoinLeague}>
-      <label>
-        Join Code:
-        <input
-          type="text"
-          value={joinCode}
-          onChange={(e) => setJoinCode(e.target.value)}
-        />
-      </label>
-      <button type="submit">Join League</button>
-    </form>
+    <div>
+      <NavBar />
+      <div className='main_item'>
+        <form onSubmit={handleJoinLeague} className='league'>
+          <label>
+            <span className="league_name_span">Join Code:</span>
+            <input
+              type="text"
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value)}
+            />
+          </label>
+          <button className="league" type="submit">Join League</button>
+        </form>
+      </div>
+    </div>
   );
 };
 

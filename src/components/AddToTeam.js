@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { auth } from '../firebase';
+
+import { db, auth } from '../firebase';
+import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import NavBar from "./NavBar"
 
 const AddToTeam = () => {
   const { leagueId } = useParams();
@@ -136,8 +139,9 @@ const AddToTeam = () => {
 
   return (
     <div>
+      <NavBar />
       {userTeam ? (
-        <div>
+        <div className='main_item'>
           <h2>Add to Team</h2>
           <p>Current Team:</p>
           <ul>
