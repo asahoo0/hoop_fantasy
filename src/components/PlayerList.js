@@ -31,23 +31,25 @@ const PlayerList = () => {
   return (
     <div>
       <NavBar />
-      <h1>Ball Don't Lie Player List</h1>
-      <Link to="/your-leagues">
-        <button>Back to Your Leagues</button>
-      </Link>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <ul>
-            {players.map(player => (
-              <li key={player.id}>{formatPlayerName(player)}</li>
-            ))}
-          </ul>
-          {/* Add pagination controls here */}
-          <button onClick={() => setCurrentPage(prevPage => prevPage + 1)}>Next Page</button>
-        </>
-      )}
+      <div className='main_item'>
+        <h1>Ball Don't Lie Player List</h1>
+        <Link to="/your-leagues">
+          <button>Back to Your Leagues</button>
+        </Link>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            <ul>
+              {players.map(player => (
+                <li key={player.id}>{formatPlayerName(player)}</li>
+              ))}
+            </ul>
+            {/* Add pagination controls here */}
+            <button onClick={() => setCurrentPage(prevPage => prevPage + 1)}>Next Page</button>
+          </>
+        )}
+      </div>
     </div>
   );
 };

@@ -23,7 +23,7 @@ const NavBarLogin = () => {
               >
                 Login
               </button>
-            </div>
+          </div>
         </nav>
     );
 }

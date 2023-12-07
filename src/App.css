@@ -36,8 +36,8 @@ nav.primary {
     justify-content: space-between;
 }
 .nav_container2 {
-    margin:0 auto;
-    
+    width:55%;
+    margin-left:auto;
 }
 
 
@@ -45,9 +45,29 @@ nav.primary {
     display:flex;
     flex-direction: column;
     width: 100%;
+    margin:0 auto;
 }
 
+ul {
+    list-style-type: none;
+}
 
+div.grid_layout {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+#create_team_button {
+    margin-top: 2%;
+}
+
+button.standard_button {
+    background-color: rgb(75,159,38);
+    color:white;
+    padding: 5%;
+    font-size: 1em;
+    border-radius: 0.5em;
+}
 
 .login_column_item {
     margin-bottom:2%;
@@ -64,7 +84,8 @@ nav.primary {
     background-color: rgb(75,159,38);
     color:white;
     padding: 5%;
-    font-size: 2em;
+    font-size: 1em;
+    
 }
 
 .main_item {

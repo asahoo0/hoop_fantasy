@@ -120,16 +120,20 @@ const CreateTeam = () => {
   return (
     <div>
       <NavBar />
-      <h1>Create Team</h1>
-      <label>
-        Team Name:
-        <input type="text" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
-      </label>
-      <label>
-        Player ID:
-        <input type="text" value={player} onChange={(e) => setPlayer(e.target.value)} />
-      </label>
-      <button onClick={handleCreateTeam}>Create Team</button>
+      <div className='main_item'>
+        <h1>Create Team</h1>
+        <div className='grid_layout'>
+          <label>
+            Team Name:
+          </label>
+          <input name="team_name" type="text" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
+          <label>
+            Player ID:
+          </label>
+          <input name="player_id" type="text" value={player} onChange={(e) => setPlayer(e.target.value)} />
+          </div>
+          <button id = "create_team_button" onClick={handleCreateTeam}>Create Team</button>
+      </div>
     </div>
   );
 };

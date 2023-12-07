@@ -84,7 +84,7 @@ const LeagueDetails = () => {
   return (
     <div>
       <NavBar />
-
+      <div className="main_item"> 
       <h2>League Details</h2>
       {team ? (
         <div>
@@ -95,7 +95,7 @@ const LeagueDetails = () => {
             <>
               {draftStarted ? (
                 isUserTurn ? (
-                  <button onClick={handleAddPlayer}>Add a Player</button>
+                  <button className="standard_button" onClick={handleAddPlayer}>Add a Player</button>
                 ) : (
                   <div>
                     <p>It's not your turn to draft.</p>
@@ -105,7 +105,7 @@ const LeagueDetails = () => {
                 <div>
                   <p>Draft has not started. You cannot add a player yet.</p>
                   {isUserTurn && (
-                    <button onClick={handleStartDraft}>Start Draft</button>
+                    <button className = "standard_button" onClick={handleStartDraft}>Start Draft</button>
                   )}
                 </div>
               )}
@@ -124,7 +124,7 @@ const LeagueDetails = () => {
                 isUserTurn ? (
                   <>
                     <p>Create a team with one player to get started.</p>
-                    <button onClick={handleCreateTeam}>Create Team</button>
+                    <button className='standard_button' onClick={handleCreateTeam}>Create Team</button>
                   </>
                 ) : (
                   <div>
@@ -135,15 +135,16 @@ const LeagueDetails = () => {
                 <div>
                   <p>Draft has not started. You cannot create a team yet.</p>
                   {(
-                    <button onClick={handleStartDraft}>Start Draft</button>
+                    <button className='standard_button' onClick={handleStartDraft}>Start Draft</button>
                   )}
                 </div>
               )}
             </>
           )}
-          <button onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>
+          <button className='standard_button'  onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>
         </div>
       )}
+      </div>
     </div>
   );
 };

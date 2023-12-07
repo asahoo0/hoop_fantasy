@@ -140,8 +140,9 @@ const AddToTeam = () => {
   return (
     <div>
       <NavBar />
+      <div className='main_item'>
       {userTeam ? (
-        <div className='main_item'>
+        <div>
           <h2>Add to Team</h2>
           <p>Current Team:</p>
           <ul>
@@ -153,11 +154,12 @@ const AddToTeam = () => {
             Player to Add:
             <input type="text" value={playerToAdd} onChange={(e) => setPlayerToAdd(e.target.value)} />
           </label>
-          <button onClick={handleAddPlayer}>Add Player</button>
+          <button className='standard_button' onClick={handleAddPlayer}>Add Player</button>
         </div>
       ) : (
         <p>Loading team details...</p>
       )}
+      </div>
     </div>
   );
 };
