@@ -28,9 +28,11 @@ api.post("/", (req, res)=> {
                     teamdb.create({_id: new mongoose.Types.ObjectId, ...req.body})
                         .then((teaminfo) => {
                             leaguedb.findByIdAndUpdate(req.body.league_id, {$push: {team_ids: teaminfo._id}})
-                                .then((err) => {res.status(200).send({message: "OK", data: teaminfo});})
+                                .then(() => {res.status(200).send({message: "OK", data: teaminfo});})
                                 .catch((err) => {res.status(500).send({message: "Server Failure occured", data:{}});});
-                        })
+                        }).catch((err)=> {
+                            res.status(500).send({message: "Server Failure occured", data:{}})
+                        });
                 }
             })
             .catch((err) => {
@@ -39,6 +41,10 @@ api.post("/", (req, res)=> {
     } else {
         res.status(400).send({message: "you are missing a name, user_id, or league_id", data:{}});
     }
+});
+
+api.put("/:userid/:id", (req,res) => { // only use this to update player list
+
 });
 
 module.exports = api;
