@@ -33,6 +33,27 @@ const JoinLeagueForm = () => {
   
       const leagueData = await response.json();
       const leagueId = leagueData.data.leagueId;
+
+      const leagueInfoResponse = await fetch(`http://localhost:4000/api/leagues/${leagueId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!leagueInfoResponse.ok) {
+        const errorData = await leagueInfoResponse.json();
+        alert(`Error fetching league information: ${errorData.message}`);
+        return;
+      }
+
+      const leagueInfo = await leagueInfoResponse.json();
+
+      // Check if the draft has started
+      if (leagueInfo.data.start) {
+        alert('Sorry, the draft has already started. You cannot join the league.');
+        return;
+      }
   
       // Fetch the existing league data
       const existingLeagueResponse = await fetch(`http://localhost:4000/api/leagues/${leagueId}/addUser`, {
