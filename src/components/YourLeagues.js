@@ -60,9 +60,7 @@ const YourLeagues = () => {
           <ul>
             {userLeagues.map((league) => (
               <li key={league.id} onClick={() => handleLeagueClick(league._id)} style={{ cursor: 'pointer' }}>
-                <Link to={`/league-details/${league._id}`}>
-                  <strong>{league.name}</strong>
-                </Link>
+                <button onClick = {() => navigate(`/league-details/${league._id}`)} className='detail'>{league.name}</button>
               </li>
             ))}
           </ul>

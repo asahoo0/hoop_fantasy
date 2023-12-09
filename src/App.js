@@ -13,6 +13,7 @@ import LeagueDetails from './components/LeagueDetails';
 import AddToTeam from './components/AddToTeam'
 import { useNavigate } from 'react-router-dom';
 import NavBar from './components/NavBar';
+import HomePage from "./components/HomePage"
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -45,9 +46,8 @@ const App = () => {
   return (
     <Router>
         { user ? (
-          <div>
             <Routes>
-              <Route path="/" element={<NavBar />} />
+              <Route path="/" element={<HomePage user={user} />} />
               <Route path="/create-league" element={<CreateLeagueForm />} />
               <Route path="/join-league" element={<JoinLeagueForm />} />
               <Route path="/your-leagues" element={<YourLeagues />} />
@@ -56,11 +56,7 @@ const App = () => {
               <Route path="/league-details/:leagueId" element={<LeagueDetails />} />
               <Route path="/add-to-team/:leagueId" element={<AddToTeam />} />
             </Routes>
-            <div className='main_item'>
-              <h1>Drafting App</h1>
-              <p>Welcome, {user.email}!</p>
-            </div>
-          </div>
+
         ) : (
             <Routes>
               <Route path="/" element={<Signup />} />

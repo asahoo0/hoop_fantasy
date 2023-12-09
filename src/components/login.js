@@ -19,7 +19,27 @@ const Login = () => {
       alert('Error logging in: ' + error.message);
     }
   };
+  const [default_username, set_default_username] = useState(false);
+  const [default_password, set_default_password] = useState(false);
 
+  const manage_email = (e) => {
+    setEmail(e.target.value);
+    //alert(e.target.value);
+    if(!(e.target.value === "")) {
+      set_default_username(true);
+    } else {
+      set_default_password(false);
+    }
+    //alert(default_username);
+  }
+
+  const manage_password = (e) => {
+    setPassword(e.target.value);
+    if(!(e.target.value === ""))
+      set_default_password(true);
+    else
+      set_default_password(false);
+  }
   return (
     <div>
       <NavBarLogin />
@@ -27,13 +47,13 @@ const Login = () => {
         <h2>Login</h2>
         <div className="login_signup_box">
           <div className="login_column_item">
-            <input className = "login_column_internal" type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+            <input className = "login_column_internal" placeholder="Email" type="email" onChange={manage_email} />
           </div>
           <div className="login_column_item">
-            <input className = "login_column_internal" type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+            <input className = "login_column_internal" type="password" placeholder="Password" onChange={manage_password} />
           </div>
           <div className="login_column_item">
-            <button className = "login_column_internal login_signin_button" onClick={handleLogin}>Login</button>
+            <button disabled = {!default_password && !default_username}className = "login_column_internal login_signin_button" onClick={handleLogin}>Login</button>
           </div>
         </div>
       </div>

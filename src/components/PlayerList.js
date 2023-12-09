@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import NavBar from './NavBar';
+import { useNavigate } from 'react-router-dom';
 
 const PlayerList = () => {
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
@@ -33,9 +34,7 @@ const PlayerList = () => {
       <NavBar />
       <div className='main_item'>
         <h1>Ball Don't Lie Player List</h1>
-        <Link to="/your-leagues">
-          <button>Back to Your Leagues</button>
-        </Link>
+        <button className="standard_button" onClick = {() => navigate("/your-leagues")}>Back to Your Leagues</button>
         {loading ? (
           <p>Loading...</p>
         ) : (
@@ -46,7 +45,7 @@ const PlayerList = () => {
               ))}
             </ul>
             {/* Add pagination controls here */}
-            <button onClick={() => setCurrentPage(prevPage => prevPage + 1)}>Next Page</button>
+            <button className="standard_button" onClick={() => setCurrentPage(prevPage => prevPage + 1)}>Next Page</button>
           </>
         )}
       </div>
