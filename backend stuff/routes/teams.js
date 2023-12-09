@@ -107,6 +107,37 @@ api.put("/:id", (req, res) => {
         });
 });
 
+api.put("/updateScore/:userId/:leagueId", async (req, res) => {
+  try {
+    const { userId, leagueId } = req.params;
+    const { score } = req.body;
+
+    // Validate that the 'score' field is present in the request body
+    if (score === undefined || score === null) {
+      return res.status(400).send({ message: "Invalid request body. 'score' field is required.", data: {} });
+    }
+
+    // Find the team by user ID and league ID
+    const team = await teamdb.findOne({ user_id: userId, league_id: leagueId });
+
+    if (!team) {
+      return res.status(404).send({ message: "Team not found", data: {} });
+    }
+
+    // Update the team's total score
+    team.score = score;
+
+    // Save the updated team
+    const updatedTeam = await team.save();
+
+    return res.status(200).send({ message: "Team score updated successfully", data: updatedTeam });
+  } catch (error) {
+    console.error("Error updating team score:", error.message);
+    return res.status(500).send({ message: "Server Failure occurred", data: {} });
+  }
+});
+
+
   
 
 module.exports = api;

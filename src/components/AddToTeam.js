@@ -105,7 +105,7 @@ const AddToTeam = () => {
       }
 
       // Update the turn based on your conditions
-      if (leagueData.data.players.length === 13*user_ids.length-1) {
+      if (leagueData.data.players.length === 7*user_ids.length-1) {
         // Make a request to update the league document with the new turn
         await fetch(`http://localhost:4000/api/leagues/${leagueId}`, {
           method: 'PUT',
