@@ -70,14 +70,10 @@ const Leaderboard = () => {
 
     fetchLeaderboard();
   }, [leagueId]);
-  const handleBackToLeagueDetails = () => {
-    navigate(`/league-details/${leagueId}`);
-  };
 
   return (
     <div>
       <h2>Leaderboard</h2>
-      <button onClick={handleBackToLeagueDetails}>Back to League Details</button>
       {loading ? (
         <p>Loading...</p>
       ) : (

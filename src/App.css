@@ -150,3 +150,16 @@ button.league {
 .league_name_span {
     margin-right: 1em;
 }
+.league-details-container {
+    display: flex;
+  }
+  
+  .league-details {
+    flex: 1; /* Take up the available space */
+    margin-right: 20px; /* Adjust the margin as needed */
+  }
+  
+  .leaderboard {
+    flex-basis: 300px; /* Set the width of the leaderboard */
+  }
+  

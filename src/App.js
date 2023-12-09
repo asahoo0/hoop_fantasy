@@ -14,6 +14,7 @@ import AddToTeam from './components/AddToTeam';
 import Leaderboard from './components/Leaderboard';
 import { useNavigate } from 'react-router-dom';
 import NavBar from './components/NavBar';
+import Scoring from './components/Scoring';
 import HomePage from "./components/HomePage"
 
 const App = () => {
@@ -57,6 +58,7 @@ const App = () => {
               <Route path="/league-details/:leagueId" element={<LeagueDetails />} />
               <Route path="/add-to-team/:leagueId" element={<AddToTeam />} />
               <Route path="/leaderboard/:leagueId" element={<Leaderboard />} />
+              <Route path="/scoring/:leagueId" element={<Scoring />} />
             </Routes>
 
         ) : (
