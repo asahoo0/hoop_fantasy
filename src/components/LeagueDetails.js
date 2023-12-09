@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { db, auth } from '../firebase';
-import { collection, query, where, getDocs, doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { auth } from '../firebase';
 import NavBar from "./NavBar"
 
 const LeagueDetails = () => {
@@ -111,7 +110,8 @@ const LeagueDetails = () => {
               )}
             </>
           )}
-          <button onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>
+          <button className='standard_button'  onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>
+          <button className='standard_button'  onClick={() => navigate(`/leaderboard/${leagueId}`)}>Leaderboard</button>
         </div>
       ) : (
         <div>
@@ -142,6 +142,7 @@ const LeagueDetails = () => {
             </>
           )}
           <button className='standard_button'  onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>
+          <button className='standard_button' onClick={() => navigate(`/leaderboard/${leagueId}`)}>Leaderboard</button>
         </div>
       )}
       </div>
