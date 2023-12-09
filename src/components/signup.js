@@ -31,7 +31,7 @@ const Signup = () => {
               <input className = "login_column_internal" type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
             </div>
             <div className="login_column_item">
-              <button className = "login_column_internal login_signin_button" onClick={handleSignUp}>Sign Up</button>
+              <button disabled={!email || !password} className = "login_column_internal login_signin_button" onClick={handleSignUp}>Sign Up</button>
             </div>
           </div>
         </div>
