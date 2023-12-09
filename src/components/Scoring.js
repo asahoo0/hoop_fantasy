@@ -8,7 +8,6 @@ const Scoring = () => {
   const [userTeam, setUserTeam] = useState([]);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserTeam = async () => {
