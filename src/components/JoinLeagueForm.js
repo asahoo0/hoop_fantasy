@@ -93,7 +93,7 @@ const JoinLeagueForm = () => {
               onChange={(e) => setJoinCode(e.target.value)}
             />
           </label>
-          <button className="league" type="submit">Join League</button>
+          <button disabled = {!joinCode} className="standard_button league" type="submit">Join League</button>
         </form>
       </div>
     </div>
