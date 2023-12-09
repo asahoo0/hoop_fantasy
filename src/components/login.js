@@ -53,7 +53,7 @@ const Login = () => {
             <input className = "login_column_internal" type="password" placeholder="Password" onChange={manage_password} />
           </div>
           <div className="login_column_item">
-            <button disabled = {!default_password && !default_username}className = "login_column_internal login_signin_button" onClick={handleLogin}>Login</button>
+            <button disabled = {!password || !email} className = "login_column_internal login_signin_button" onClick={handleLogin}>Login</button>
           </div>
         </div>
       </div>
