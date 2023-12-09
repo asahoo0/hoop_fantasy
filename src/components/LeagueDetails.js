@@ -110,7 +110,7 @@ const LeagueDetails = () => {
               )}
             </>
           )}
-          <button className='standard_button'  onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>
+          <button className='standard_button' className='standard_button'  onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>
           <button className='standard_button'  onClick={() => navigate(`/leaderboard/${leagueId}`)}>Leaderboard</button>
         </div>
       ) : (

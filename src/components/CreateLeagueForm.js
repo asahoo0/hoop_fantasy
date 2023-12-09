@@ -19,7 +19,7 @@ const CreateLeagueForm = () => {
 
   const handleCreateLeague = async (e) => {
     e.preventDefault();
-  
+
     try {
       const user = auth.currentUser;
       if (!user) {
@@ -80,7 +80,7 @@ const CreateLeagueForm = () => {
               onChange={(e) => setLeagueName(e.target.value)}
             />
           </label>
-          <button className="league" type="submit">Create League</button>
+          <button disabled = {!leagueName} className="standard_button league" type="submit">Create League</button>
         </form>
       </div>
     </div>

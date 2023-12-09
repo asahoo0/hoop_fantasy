@@ -132,7 +132,7 @@ const CreateTeam = () => {
           </label>
           <input name="player_id" type="text" value={player} onChange={(e) => setPlayer(e.target.value)} />
           </div>
-          <button id = "create_team_button" onClick={handleCreateTeam}>Create Team</button>
+          <button disabled = {!player || !teamName} className = "standard_button create_team_button" onClick={handleCreateTeam}>Create Team</button>
       </div>
     </div>
   );
