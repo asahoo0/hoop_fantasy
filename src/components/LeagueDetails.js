@@ -11,6 +11,7 @@ const LeagueDetails = () => {
   const [draftStarted, setDraftStarted] = useState(false);
   const [isUserTurn, setIsUserTurn] = useState(false);
   const [draftEnded, setDraftEnded] = useState(false);
+  const [teamScored, setTeamScored] = useState(false); // New state for teamScored
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
   const navigate = useNavigate();
@@ -40,6 +41,9 @@ const LeagueDetails = () => {
         const teamsData = await teamsResponse.json();
         const userTeamInLeague = teamsData.data;
         setTeamExists(!!userTeamInLeague);
+
+        // Check if the team has already scored
+        setTeamScored(userTeamInLeague.score > 0);
       } catch (error) {
         console.error('Error fetching data:', error.message);
       }
@@ -86,83 +90,92 @@ const LeagueDetails = () => {
     navigate(`/scoring/${leagueId}`); // Link to the Scoring component with leagueId as a param
   };
 
-  return (
-    <div>
-      <NavBar />
-      <div className="main_item league-details-container">
-        <div className="league-details">
-          <h2>League Details</h2>
-          {team ? (
-            <div>
-              <p>You have a team in this league.</p>
-              {draftEnded ? (
-                <div>
-                  <p>The draft has ended.</p>
+return (
+  <div>
+    <NavBar />
+    <div className="main_item league-details-container">
+      <div className="league-details">
+        <h2>League Details</h2>
+        {team ? (  // Check if the user has a team in the league
+          <div>
+            <p>You have a team in this league.</p>
+            {draftEnded ? (  // Check if the draft has ended
+              <div>
+                <p>The draft has ended.</p>
+                {teamScored ? (  // Check if the team has already scored
+                  <p>Team has already scored.</p>
+                ) : (
                   <button className="standard_button" onClick={handleScoring}>Scoring</button>
-                </div>
-              ) : (
-                <>
-                  {draftStarted ? (
-                    isUserTurn ? (
-                      <button className="standard_button" onClick={handleAddPlayer}>Add a Player</button>
-                    ) : (
-                      <div>
-                        <p>It's not your turn to draft.</p>
-                      </div>
-                    )
+                )}
+              </div>
+            ) : (
+              <>  {/* Conditional rendering for draft state */}
+                {draftStarted ? (
+                  isUserTurn ? (
+                    <button className="standard_button" onClick={handleAddPlayer}>Add a Player</button>
                   ) : (
                     <div>
-                      <p>Draft has not started. You cannot add a player yet.</p>
-                      {isUserTurn && (
-                        <button className="standard_button" onClick={handleStartDraft}>Start Draft</button>
-                      )}
+                      <p>It's not your turn to draft.</p>
                     </div>
-                  )}
-                </>
-              )}
-              <button className='standard_button' onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>
-            </div>
-          ) : (
-            <div>
-              <p>You don't have a team in this league.</p>
-              {draftEnded ? (
-                <div>
-                  <p>The draft has ended.</p>
+                  )
+                ) : (
+                  <div>
+                    <p>Draft has not started. You cannot add a player yet.</p>
+                    {isUserTurn && (
+                      <button className="standard_button" onClick={handleStartDraft}>Start Draft</button>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+            {<button className='standard_button' onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>}
+          </div>
+        ) : (
+          <div>
+            <p>You don't have a team in this league.</p>
+            {draftEnded ? (
+              <div>
+                <p>The draft has ended.</p>
+                {teamScored ? (
+                  <p>Team has already scored.</p>
+                ) : (
                   <button className="standard_button" onClick={handleScoring}>Scoring</button>
-                </div>
-              ) : (
-                <>
-                  {draftStarted ? (
-                    isUserTurn ? (
-                      <>
-                        <p>Create a team with one player to get started.</p>
-                        <button className='standard_button' onClick={handleCreateTeam}>Create Team</button>
-                      </>
-                    ) : (
-                      <div>
-                        <p>It's not your turn to draft.</p>
-                      </div>
-                    )
+                )}
+              </div>
+            ) : (
+              <>  {/* Conditional rendering for draft state */}
+                {draftStarted ? (
+                  isUserTurn ? (
+                    <>
+                      <p>Create a team with one player to get started.</p>
+                      <button className='standard_button' onClick={handleCreateTeam}>Create Team</button>
+                    </>
                   ) : (
                     <div>
-                      <p>Draft has not started. You cannot create a team yet.</p>
-                      {(
-                        <button className='standard_button' onClick={handleStartDraft}>Start Draft</button>
-                      )}
+                      <p>It's not your turn to draft.</p>
                     </div>
-                  )}
-                </>
-              )}
-              <button className='standard_button' onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>
-            </div>
-          )}
-        </div>
-        <div className="leaderboard">
-          <Leaderboard leagueId={leagueId} />
-        </div>
+                  )
+                ) : (
+                  <div>
+                    <p>Draft has not started. You cannot create a team yet.</p>
+                    {(
+                      <button className='standard_button' onClick={handleStartDraft}>Start Draft</button>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+            {<button className='standard_button' onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>}
+          </div>
+        )}
+      </div>
+      <div className="leaderboard">
+        <Leaderboard leagueId={leagueId} />
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default LeagueDetails;
