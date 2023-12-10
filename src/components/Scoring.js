@@ -9,6 +9,7 @@ const Scoring = () => {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('')
   const navigate = useNavigate();
+  const remainingPlayers = userTeam.filter(playerNumber => !selectedPlayers.includes(playerNumber));
 
   useEffect(() => {
     const fetchUserTeam = async () => {
@@ -115,11 +116,11 @@ const Scoring = () => {
   return (
     <div>
       <h2>Player Scoring</h2>
+      <h3>Select 5 players from your team:</h3>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div>
-          <p>Select 5 players from your team:</p>
+        <div className="Scoring">
           <div className="player-buttons">
             {userTeam.map((playerNumber) => (
               <button
@@ -134,6 +135,16 @@ const Scoring = () => {
           <button onClick={handleScoringSubmit} disabled={selectedPlayers.length !== 5}>
             Submit Scoring
           </button>
+        </div>
+      )}
+      
+      {/* Display the remaining/not selected players outside the Scoring div */}
+      {!loading && (
+        <div className="remaining-players">
+          <p>Remaining Players:</p>
+          {remainingPlayers.map((playerNumber) => (
+            <p key={playerNumber}>{`Player ${playerNumber}`}</p>
+          ))}
         </div>
       )}
       <p id="message">{message}</p>
