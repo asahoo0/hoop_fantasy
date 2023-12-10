@@ -175,4 +175,36 @@ button.league {
   .leaderboard {
     flex-basis: 300px; /* Set the width of the leaderboard */
   }
+  .player-buttons {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .player-buttons button {
+    background-color: rgb(38, 129, 159);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+  }
+  
+  .player-buttons button.selected {
+    background-color: rgb(14, 50, 62); /* Highlight color when selected */
+  }
+  
+  .player-buttons button:disabled {
+    background-color: #ccc; /* Disabled button color */
+    cursor: not-allowed;
+  }
+  
+  .player-buttons button:hover {
+    background-color: #2658a4; /* Hover color */
+  }
+
+  .Scoring {
+    display: flex;
+    justify-content: center;
+  }
+  
   
