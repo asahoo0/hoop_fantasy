@@ -62,22 +62,24 @@ const PlayerList = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button onClick={handleSearch}>Search</button>
+          <button className="search" onClick={handleSearch}>Search</button>
         </div>
-        {loading ? (
-          <div></div>
-          // <p>Loading...</p>
-        ) : (
-          <>
-            <ul>
-              {players.map(player => (
-                <li key={player.id}>{formatPlayerName(player)}</li>
-              ))}
-            </ul>
-            {/* Add pagination controls here */}
-            <button className="standard_button" onClick={() => setCurrentPage(prevPage => prevPage + 1)}>Next Page</button>
-          </>
-        )}
+          <div class="list">
+            {loading ? (
+              <div></div>
+              // <p>Loading...</p>
+            ) : (
+              <>
+                <ul>
+                  {players.map(player => (
+                    <li key={player.id}>{formatPlayerName(player)}</li>
+                  ))}
+                </ul>
+                {/* Add pagination controls here
+                <button className="standard_button" onClick={() => setCurrentPage(prevPage => prevPage + 1)}>Next Page</button> */}
+              </>
+            )}
+          </div>
       </div>
     </div>
   );
