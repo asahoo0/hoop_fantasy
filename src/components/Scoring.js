@@ -7,6 +7,7 @@ const Scoring = () => {
   const [userTeam, setUserTeam] = useState([]);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('')
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,7 +15,8 @@ const Scoring = () => {
       try {
         const user = auth.currentUser;
         if (!user) {
-          alert('User not authenticated');
+          document.getElementById('message').style.color = 'red'
+          setMessage('User not authenticated')
           return;
         }
 
@@ -27,7 +29,8 @@ const Scoring = () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          alert(`Error fetching user team: ${errorData.message}`);
+          document.getElementById('message').style.color = 'red'
+          setMessage(`Error fetching user team: ${errorData.message}`)
           return;
         }
 
@@ -35,7 +38,8 @@ const Scoring = () => {
         setUserTeam(teamData.data.players || []);
         setLoading(false);
       } catch (error) {
-        alert(`Error fetching user team: ${error.message}`);
+        document.getElementById('message').style.color = 'red'
+        setMessage(`Error fetching user team: ${error.message}`)
       }
     };
 
@@ -132,6 +136,7 @@ const Scoring = () => {
           </button>
         </div>
       )}
+      <p id="message">{message}</p>
     </div>
   );
 };
