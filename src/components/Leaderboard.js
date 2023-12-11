@@ -14,35 +14,29 @@ const Leaderboard = () => {
       try {
         const user = auth.currentUser;
         if (!user) {
-          document.getElementById('message').style.color = 'red'
-          setMessage('User not authenticated')
+          setMessage('User not authenticated');
           return;
         }
-
-        const response = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
+    
+        const response = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`);
+    
         if (!response.ok) {
           const errorData = await response.json();
-          document.getElementById('message').style.color = 'red'
-          setMessage(`Error fetching league details: ${errorData.message}`)
+          setMessage(`Error fetching league details: ${errorData.message}`);
           return;
         }
-
+    
         const leagueData = await response.json();
         const teamIds = leagueData.data.team_ids || [];
 
         if (teamIds.length === 0) {
-          // If teams don't exist, show the user's email with a score of 0
-          setTeams([{ user_email: user.email, score: 0 }]);
+          // If teams don't exist, show the user IDs from leagueData.data.user_ids with a score of 0
+          const userScores = leagueData.data.user_ids.map((userId, index) => ({ user_id: `User ${index + 1}`, score: 0 }));
+          setTeams(userScores);
           setLoading(false);
           return;
         }
-
+    
         // Fetch details for each team
         const teamsWithDetails = await Promise.all(
           teamIds.map(async (teamId) => {
@@ -52,23 +46,22 @@ const Leaderboard = () => {
                 'Content-Type': 'application/json',
               },
             });
-
+    
             if (!teamDetailsResponse.ok) {
               console.error(`Error fetching team details for team ${teamId}: ${teamDetailsResponse.statusText}`);
               return null;
             }
-
+    
             const teamDetailsData = await teamDetailsResponse.json();
             return teamDetailsData.data;
           })
         );
-
+    
         // Remove null entries (failed fetches) and set the teams state
         setTeams(teamsWithDetails.filter((team) => team !== null));
         setLoading(false);
       } catch (error) {
-        document.getElementById('message').style.color = 'red'
-        setMessage(`Error fetching teams: ${error.message}`)
+        setMessage(`Error fetching teams: ${error.message}`);
       }
     };
 
@@ -90,7 +83,7 @@ const Leaderboard = () => {
                 </>
               ) : (
                 <>
-                  <strong>Email:</strong> {team.user_email} <strong>Score:</strong> {team.score}
+                  <strong>Team:</strong> {team.user_id} <strong>Score:</strong> {team.score}
                 </>
               )}
             </li>
