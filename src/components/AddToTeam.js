@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase';
 import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
 import NavBar from "./NavBar"
+import PlayerSearch from './PlayerSearch';
 
 const AddToTeam = () => {
   const { leagueId } = useParams();
@@ -144,6 +145,7 @@ const AddToTeam = () => {
   return (
     <div>
       <NavBar />
+      <PlayerSearch />
       <div className='main_item'>
       {userTeam ? (
         <div>
@@ -154,10 +156,12 @@ const AddToTeam = () => {
               <li key={index}>{player}</li>
             ))}
           </ul>
-          <label>
-            Player to Add:
+          <div className='extra_space'>
+            <label className='extra_space'>
+              Player to Add:  
+            </label>
             <input type="text" value={playerToAdd} onChange={(e) => setPlayerToAdd(e.target.value)} />
-          </label>
+          </div>
           <button className='standard_button' onClick={handleAddPlayer}>Add Player</button>
           <p id="message">{message}</p>
         </div>

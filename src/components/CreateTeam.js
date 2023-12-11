@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase';
 import { collection, addDoc, getDoc, updateDoc, doc } from 'firebase/firestore';
 import NavBar from "./NavBar"
+import axios from 'axios';
+import { filterCurrent } from './id';
+import PlayerSearch from './PlayerSearch';
 
 const CreateTeam = () => {
   const { leagueId } = useParams();
@@ -12,7 +15,9 @@ const CreateTeam = () => {
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
   const navigate = useNavigate();
-
+  const [searchTerm, setSearchTerm] = useState('');
+  const [players, setPlayers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const handleCreateTeam = async () => {
     try {
       // Validate player input
@@ -119,18 +124,30 @@ const CreateTeam = () => {
     }
     return false;
   };
+  const handleSearch = async () => {
+    axios.get(`https://www.balldontlie.io/api/v1/players?search=${searchTerm}&per_page=100`)
+      .then((res)=>{
+        console.log(res.data.data)
+        setPlayers(filterCurrent(res.data.data))
+        setLoading(false);
+      })
+      .catch((error)=>{
+        console.log(error);
+      });
+  };
   
 
   return (
     <div>
       <NavBar />
+      <PlayerSearch />
       <div className='main_item'>
-        <h1>Create Team</h1>
         <div className='grid_layout'>
           <label>
             Team Name:
           </label>
           <input name="team_name" type="text" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
+          
           <label>
             Player ID:
           </label>
