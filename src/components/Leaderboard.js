@@ -19,7 +19,7 @@ const Leaderboard = () => {
           return;
         }
 
-        const response = await fetch(`http://localhost:4000/api/leagues/${leagueId}`, {
+        const response = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ const Leaderboard = () => {
         // Fetch details for each team
         const teamsWithDetails = await Promise.all(
           teamIds.map(async (teamId) => {
-            const teamDetailsResponse = await fetch(`http://localhost:4000/api/teams/${teamId}`, {
+            const teamDetailsResponse = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/teams/${teamId}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',

@@ -32,7 +32,7 @@ const CreateLeagueForm = () => {
       const creatorUID = user.uid;
       const joinCode = generateJoinCode();
   
-      const response = await fetch('http://localhost:4000/api/leagues', {
+      const response = await fetch('https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ const CreateLeagueForm = () => {
       const leagueData = await response.json();
       const leagueID = leagueData.data._id;
   
-      await fetch(`http://localhost:4000/api/leagues/${leagueID}`, {
+      await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueID}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

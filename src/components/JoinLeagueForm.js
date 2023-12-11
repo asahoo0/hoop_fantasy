@@ -20,7 +20,7 @@ const JoinLeagueForm = () => {
       const userUID = user.uid;
   
       // Replace the Firestore query with your API call to get the leagueId
-      const response = await fetch(`http://localhost:4000/api/leagues/getLeagueId/${joinCode}`, {
+      const response = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/getLeagueId/${joinCode}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const JoinLeagueForm = () => {
       const leagueData = await response.json();
       const leagueId = leagueData.data.leagueId;
 
-      const leagueInfoResponse = await fetch(`http://localhost:4000/api/leagues/${leagueId}`, {
+      const leagueInfoResponse = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const JoinLeagueForm = () => {
       }
   
       // Fetch the existing league data
-      const existingLeagueResponse = await fetch(`http://localhost:4000/api/leagues/${leagueId}/addUser`, {
+      const existingLeagueResponse = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}/addUser`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

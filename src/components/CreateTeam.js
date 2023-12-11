@@ -28,7 +28,7 @@ const CreateTeam = () => {
       }
 
       // Fetch all teams in the league
-      const leagueTeamsResponse = await fetch(`http://localhost:4000/api/leagues/${leagueId}`);
+      const leagueTeamsResponse = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`);
       if (!leagueTeamsResponse.ok) {
         console.error('Error fetching league teams:', leagueTeamsResponse.statusText);
         return;

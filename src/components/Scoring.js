@@ -23,7 +23,7 @@ const Scoring = () => {
           return;
         }
 
-        const response = await fetch(`http://localhost:4000/api/teams/userTeam/${user.uid}/${leagueId}`, {
+        const response = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/teams/userTeam/${user.uid}/${leagueId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ const Scoring = () => {
       const user = auth.currentUser;
 
       // Update the total score in the backend
-      const updateScoreResponse = await fetch(`http://localhost:4000/api/teams/updateScore/${user.uid}/${leagueId}`, {
+      const updateScoreResponse = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/teams/updateScore/${user.uid}/${leagueId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -18,7 +18,7 @@ const AddToTeam = () => {
   useEffect(() => {
     const fetchUserTeam = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/api/teams/userTeam/${userId}/${leagueId}`);
+        const response = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/teams/userTeam/${userId}/${leagueId}`);
         
         if (!response.ok) {
           console.error('Error fetching user team:', response.statusText);
@@ -47,7 +47,7 @@ const AddToTeam = () => {
       }
   
       // Fetch all teams in the league
-      const leagueTeamsResponse = await fetch(`http://localhost:4000/api/leagues/${leagueId}`);
+      const leagueTeamsResponse = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`);
       if (!leagueTeamsResponse.ok) {
         console.error('Error fetching league teams:', leagueTeamsResponse.statusText);
         return;
@@ -66,7 +66,7 @@ const AddToTeam = () => {
   
       // Make a request to your custom API endpoint to update the team with the added player
       console.log(userTeam._id)
-      const response = await fetch(`http://localhost:4000/api/teams/${userTeam._id}`, {
+      const response = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/teams/${userTeam._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ const AddToTeam = () => {
       }
   
       // Fetch league details to get the updated turn
-      const leagueResponse = await fetch(`http://localhost:4000/api/leagues/${leagueId}`);
+      const leagueResponse = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`);
       if (!leagueResponse.ok) {
         console.error('Error fetching league details:', leagueResponse.statusText);
         return;
@@ -97,7 +97,7 @@ const AddToTeam = () => {
       // Update the turn based on your conditions
       if (turn < user_ids.length) {
         // Make a request to update the league document with the new turn
-        await fetch(`http://localhost:4000/api/leagues/${leagueId}`, {
+        await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ const AddToTeam = () => {
       // Update the turn based on your conditions
       if (leagueData.data.players.length === 7*user_ids.length-1) {
         // Make a request to update the league document with the new turn
-        await fetch(`http://localhost:4000/api/leagues/${leagueId}`, {
+        await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

@@ -19,7 +19,7 @@ const YourLeagues = () => {
 
         const userUID = user.uid;
 
-        const response = await fetch(`http://localhost:4000/api/leagues/userLeagues/${userUID}`, {
+        const response = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/userLeagues/${userUID}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

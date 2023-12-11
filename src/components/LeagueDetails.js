@@ -15,11 +15,13 @@ const LeagueDetails = () => {
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
   const navigate = useNavigate();
+  const [refreshInterval, setRefreshInterval] = useState(null);
 
   useEffect(() => {
+    
     const fetchData = async () => {
       try {
-        const draftResponse = await fetch(`http://localhost:4000/api/leagues/${leagueId}`);
+        const draftResponse = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`);
         if (!draftResponse.ok) {
           console.error('Error fetching league details:', draftResponse.start);
           return;
@@ -32,7 +34,7 @@ const LeagueDetails = () => {
         const isUserTurn = draftData.data.user_ids && draftData.data.user_ids[draftData.data.turn] === userId;
         setIsUserTurn(isUserTurn);
 
-        const teamsResponse = await fetch(`http://localhost:4000/api/teams/userTeam/${userId}/${leagueId}`);
+        const teamsResponse = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/teams/userTeam/${userId}/${leagueId}`);
         if (!teamsResponse.ok) {
           console.error('Error fetching user teams:', teamsResponse.statusText);
           return;
@@ -59,7 +61,7 @@ const LeagueDetails = () => {
         return;
       }
 
-      const response = await fetch(`http://localhost:4000/api/leagues/${leagueId}`, {
+      const response = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
