@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
+import axios from 'axios';
+import NavBar from './NavBar';
 
 const Scoring = () => {
   const { leagueId } = useParams();
@@ -8,7 +10,7 @@ const Scoring = () => {
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const remainingPlayers = userTeam.filter(playerNumber => !selectedPlayers.includes(playerNumber));
+  const remainingPlayers = userTeam.filter(player => !selectedPlayers.includes(player));
 
   useEffect(() => {
     const fetchUserTeam = async () => {
@@ -33,7 +35,40 @@ const Scoring = () => {
         }
 
         const teamData = await response.json();
-        setUserTeam(teamData.data.players || []);
+        let temp = []
+        for (const player of teamData.data.players) {
+          try {
+            const resplayer = await axios.get(`https://www.balldontlie.io/api/v1/players/${player}`);
+            
+            const info = resplayer.data
+            // console.log(info)
+            let content = {id: player, name: `${info.first_name} ${info.last_name}`, team: info.team.full_name, pts: 0, ast: 0, reb: 0, st: 0, blk: 0};
+            // console.log(content);
+            temp.push(content);
+          } catch (error) {
+            console.error(`Error fetching data for ID ${player}:`, error.message);
+            // Handle errors if necessary
+          }
+        }
+        try {
+          const playerIdsQueryParam = temp.map((player) => `player_ids[]=${player.id}`).join('&');
+          const resStats = await axios.get(`https://www.balldontlie.io/api/v1/season_averages?season=2023&${playerIdsQueryParam}`);
+          console.log(resStats.data.data);
+          resStats.data.data.forEach(stat => {
+            const playerToUpdate = temp.find(player => player.id === stat.player_id);
+            if (playerToUpdate) {
+              playerToUpdate.pts = stat.pts;
+              playerToUpdate.ast = stat.ast;
+              playerToUpdate.blk = stat.blk;
+              playerToUpdate.stl = stat.stl;
+              playerToUpdate.reb = stat.reb;
+            }
+          })
+        } catch (error) {
+
+        }
+        console.log(temp)
+        setUserTeam(temp || []);
         setLoading(false);
       } catch (error) {
         alert(`Error fetching user team: ${error.message}`);
@@ -54,6 +89,7 @@ const Scoring = () => {
         setSelectedPlayers((prevSelected) => [...prevSelected, playerNumber]);
       }
     }
+    console.log(selectedPlayers);
   };
   const calculatePlayerScore = (playerData) => {
     const { pts, ast, reb, stl, blk } = playerData;
@@ -68,32 +104,40 @@ const Scoring = () => {
       console.log('Selected Players:', selectedPlayers);
 
       // Make a request to the balldontlie API with selected player IDs
-      const playerIdsQueryParam = selectedPlayers.map((playerId) => `player_ids[]=${playerId}`).join('&');
-      const response = await fetch(`https://www.balldontlie.io/api/v1/season_averages?season=2023&${playerIdsQueryParam}`);
+      // const playerIdsQueryParam = selectedPlayers.map((playerId) => `player_ids[]=${playerId}`).join('&');
+      // const response = await fetch(`https://www.balldontlie.io/api/v1/season_averages?season=2023&${playerIdsQueryParam}`);
 
-      if (!response.ok) {
-        console.error('Error fetching season averages:', response.statusText);
-        return;
-      }
+      // if (!response.ok) {
+      //   console.error('Error fetching season averages:', response.statusText);
+      //   return;
+      // }
 
-      const seasonAveragesData = await response.json();
-      console.log('Season Averages Data:', seasonAveragesData);
-      const playerScores = seasonAveragesData.data.map(calculatePlayerScore);
+      // const seasonAveragesData = await response.json();
+      // console.log('Season Averages Data:', seasonAveragesData);
+      const playerScores = selectedPlayers.map(calculatePlayerScore);
 
       console.log('Player Scores:', playerScores);
-
+      const custompts = document.getElementById("pts").value;
+      const customast = document.getElementById("ast").value;
+      const customreb = document.getElementById("reb").value;
+      const customblk = document.getElementById("blk").value;
+      const customstl = document.getElementById("stl").value;
+      const customPlayer = {pts: custompts, ast: customast, reb: customreb, blk: customblk, stl: customstl}
+      const customPlayerScore = calculatePlayerScore(customPlayer);
       // Calculate the total score for the team
-      const totalScore = playerScores.reduce((sum, score) => sum + score, 0);
+      const totalplayerScores = playerScores.reduce((sum, score) => sum + score, 0);
+      const totalScore =  totalplayerScores + customPlayerScore;
+      console.log(totalScore, totalplayerScores, customPlayerScore);
       const user = auth.currentUser;
 
       // Update the total score in the backend
       const updateScoreResponse = await fetch(`http://localhost:4000/api/teams/updateScore/${user.uid}/${leagueId}`, {
-  method: 'PUT',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({ score: totalScore.toFixed(2) }), // Make sure the field name matches what the backend expects
-});
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ score: totalScore.toFixed(2) }), // Make sure the field name matches what the backend expects
+      });
 
       if (!updateScoreResponse.ok) {
         console.error('Error updating team score:', updateScoreResponse.statusText);
@@ -110,21 +154,24 @@ const Scoring = () => {
   };
 
   return (
+    
     <div>
-      <h2>Player Scoring</h2>
-      <h3>Select 5 players from your team:</h3>
+      <NavBar />
+      <h1>Player Scoring</h1>
+      <h2>Select 5 players from your team:</h2>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <div className="Scoring">
           <div className="player-buttons">
-            {userTeam.map((playerNumber) => (
+            {userTeam.map((player) => (
               <button
-                key={playerNumber}
-                onClick={() => handlePlayerClick(playerNumber)}
-                className={selectedPlayers.includes(playerNumber) ? 'selected' : ''}
+                key={player.id}
+                onClick={() => handlePlayerClick(player)}
+                className={selectedPlayers.includes(player) ? 'selected' : ''}
               >
-                {`Player ${playerNumber}`}
+                <h2>{`${player.name}`}</h2>
+                <p>Team: {player.team} <br/>Pts: {player.pts} <br/>Ast: {player.ast}<br/>Reb: {player.reb}<br/>Stl: {player.stl}, Blk: {player.blk}</p>
               </button>
             ))}
           </div>
@@ -135,14 +182,45 @@ const Scoring = () => {
       )}
 
       {/* Display the remaining/not selected players outside the Scoring div */}
-      {!loading && (
+      
+      {!loading && selectedPlayers.length === 5 ? (
+        <div className='customplayer'>
+          <h2>Now, select which players to use for your custom player: </h2>
+          <select id="pts" onChange={(e) => console.log(e.target.value)}>
+              {remainingPlayers.map((player) => (
+                <option value={player.pts}>{player.name}</option>
+              ))}
+          </select>
+          <select id="ast" onChange={(e) => console.log(e.target.value)}>
+            {remainingPlayers.map((player) => (
+                <option value={player.ast}>{player.name}</option>
+              ))}
+          </select>
+          <select id="reb" onChange={(e) => console.log(e.target.value)}>
+            {remainingPlayers.map((player) => 
+                (<option value={player.reb}>{player.name}</option>)
+              )}
+          </select>
+          <select id="blk" onChange={(e) => console.log(e.target.value)}>
+              {remainingPlayers.map((player) => 
+               ( <option value={player.blk}>{player.name}</option>)
+              )}
+          </select>
+          <select id="stl" onChange={(e) => console.log(e.target.value)}>
+              {remainingPlayers.map((player) => 
+                (<option value={player.stl}>{player.name}</option>)
+              )}
+          </select>
+        </div>
+      ): (<div></div>)}
+      {/* {!loading && (
         <div className="remaining-players">
           <p>Remaining Players:</p>
-          {remainingPlayers.map((playerNumber) => (
-            <p key={playerNumber}>{`Player ${playerNumber}`}</p>
+          {remainingPlayers.map((player) => (
+            <p key={player.id}>{`${player.name}`}</p>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
