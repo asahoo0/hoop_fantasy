@@ -54,16 +54,7 @@ const PlayerList = () => {
       <div className='main_item'>
         <h1>Ball Don't Lie Player List</h1>
         <button className="standard_button" onClick = {() => navigate("/your-leagues")}>Back to Your Leagues</button>
-        <div>
-          <h1>Search For Players</h1>
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button className="search" onClick={handleSearch}>Search</button>
-        </div>
+
           <div class="list">
             {loading ? (
               <div></div>

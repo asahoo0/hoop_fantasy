@@ -6,14 +6,17 @@ import NavBarLogin from "./NavBarLogin"
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('')
 
   const handleSignUp = async () => {
     try {
       const auth = getAuth();
       await createUserWithEmailAndPassword(auth, email, password);
-      alert('User signed up successfully!');
+      document.getElementById('message').style.color = 'lightgreen'
+      setMessage('User signed up successfully!')
     } catch (error) {
-      alert('Error signing up: ' + error.message);
+      document.getElementById('message').style.color = 'red'
+      setMessage('Error signing up: ' + error.message)
     }
   };
 
@@ -32,6 +35,9 @@ const Signup = () => {
             </div>
             <div className="login_column_item">
               <button disabled={!email || !password} className = "login_column_internal login_signin_button" onClick={handleSignUp}>Sign Up</button>
+            </div>
+            <div className="login_column_item">
+              <p id="message">{message}</p>
             </div>
           </div>
         </div>

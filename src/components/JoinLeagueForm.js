@@ -4,6 +4,7 @@ import NavBar from './NavBar';
 
 const JoinLeagueForm = () => {
   const [joinCode, setJoinCode] = useState('');
+  const [message, setMessage] = useState('')
 
   const handleJoinLeague = async (e) => {
     e.preventDefault();
@@ -11,7 +12,8 @@ const JoinLeagueForm = () => {
     try {
       const user = auth.currentUser;
       if (!user) {
-        alert('User not authenticated');
+        document.getElementById('message').style.color = 'red'
+        setMessage('User not authenticated')
         return;
       }
   
@@ -27,7 +29,8 @@ const JoinLeagueForm = () => {
   
       if (!response.ok) {
         const errorData = await response.json();
-        alert(`Error joining league: ${errorData.message}`);
+        document.getElementById('message').style.color = 'red'
+        setMessage(`Error joining league: ${errorData.message}`)
         return;
       }
   
@@ -43,7 +46,8 @@ const JoinLeagueForm = () => {
 
       if (!leagueInfoResponse.ok) {
         const errorData = await leagueInfoResponse.json();
-        alert(`Error fetching league information: ${errorData.message}`);
+        document.getElementById('message').style.color = 'red'
+        setMessage(`Error fetching league information: ${errorData.message}`)
         return;
       }
 
@@ -51,7 +55,8 @@ const JoinLeagueForm = () => {
 
       // Check if the draft has started
       if (leagueInfo.data.start) {
-        alert('Sorry, the draft has already started. You cannot join the league.');
+        document.getElementById('message').style.color = 'red'
+        setMessage('Sorry, the draft has already started. You cannot join the league.')
         return;
       }
   
@@ -68,15 +73,18 @@ const JoinLeagueForm = () => {
   
       if (!existingLeagueResponse.ok) {
         const errorData = await existingLeagueResponse.json();
-        alert(`Error joining league: ${errorData.message}`);
+        document.getElementById('message').style.color = 'red'
+        setMessage(`Error joining league: ${errorData.message}`)
         return;
       }
   
       // Now you've successfully joined the league
-      alert(`You have joined the league successfully! League ID: ${leagueId}`);
+      document.getElementById('message').style.color = 'lightgreen'
+      setMessage(`You have joined the league successfully! League ID: ${leagueId}`)
       // You can add additional logic or redirect the user after joining the league
     } catch (error) {
-      alert(`Error joining league: ${error.message}`);
+      document.getElementById('message').style.color = 'red'
+      setMessage(`Error joining league: ${error.message}`)
     }
   };
 
@@ -95,6 +103,7 @@ const JoinLeagueForm = () => {
           </label>
           <button disabled = {!joinCode} className="standard_button league" type="submit">Join League</button>
         </form>
+        <p id="message">{message}</p>
       </div>
     </div>
   );

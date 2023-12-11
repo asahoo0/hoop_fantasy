@@ -16,6 +16,7 @@ const generateJoinCode = () => {
 
 const CreateLeagueForm = () => {
   const [leagueName, setLeagueName] = useState('');
+  const [message, setMessage] = useState('')
 
   const handleCreateLeague = async (e) => {
     e.preventDefault();
@@ -23,7 +24,8 @@ const CreateLeagueForm = () => {
     try {
       const user = auth.currentUser;
       if (!user) {
-        alert('User not authenticated');
+        document.getElementById('message').style.color = 'red'
+        setMessage('User not authenticated')
         return;
       }
   
@@ -43,7 +45,8 @@ const CreateLeagueForm = () => {
   
       if (!response.ok) {
         const errorData = await response.json();
-        alert(`Error creating league: ${errorData.message}`);
+        document.getElementById('message').style.color = 'red'
+        setMessage(`Error creating league: ${errorData.message}`)
         return;
       }
   
@@ -60,9 +63,11 @@ const CreateLeagueForm = () => {
         }),
       });
   
-      alert(`League created successfully with ID: ${leagueID} and Join Code: ${joinCode}`);
+      document.getElementById('message').style.color = 'lightgreen'
+      setMessage([`League created successfully`,<br/>,`ID: ${leagueID}`,<br/>,`Join Code: ${joinCode}`])
     } catch (error) {
-      alert(`Error creating league: ${error.message}`);
+      document.getElementById('message').style.color = 'red'
+      setMessage(`Error creating league: ${error.message}`)
     }
   };
   
@@ -82,6 +87,7 @@ const CreateLeagueForm = () => {
           </label>
           <button disabled = {!leagueName} className="standard_button league" type="submit">Create League</button>
         </form>
+        <p id='message'>{message}</p>
       </div>
     </div>
   );

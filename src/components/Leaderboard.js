@@ -6,6 +6,7 @@ const Leaderboard = () => {
   const { leagueId } = useParams();
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('')
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,7 +14,8 @@ const Leaderboard = () => {
       try {
         const user = auth.currentUser;
         if (!user) {
-          alert('User not authenticated');
+          document.getElementById('message').style.color = 'red'
+          setMessage('User not authenticated')
           return;
         }
 
@@ -26,7 +28,8 @@ const Leaderboard = () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          alert(`Error fetching league details: ${errorData.message}`);
+          document.getElementById('message').style.color = 'red'
+          setMessage(`Error fetching league details: ${errorData.message}`)
           return;
         }
 
@@ -64,7 +67,8 @@ const Leaderboard = () => {
         setTeams(teamsWithDetails.filter((team) => team !== null));
         setLoading(false);
       } catch (error) {
-        alert(`Error fetching teams: ${error.message}`);
+        document.getElementById('message').style.color = 'red'
+        setMessage(`Error fetching teams: ${error.message}`)
       }
     };
 
@@ -93,6 +97,7 @@ const Leaderboard = () => {
           ))}
         </ul>
       )}
+      <p id="message">{message}</p>
     </div>
   );
 };

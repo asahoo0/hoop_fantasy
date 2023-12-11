@@ -9,6 +9,7 @@ const Scoring = () => {
   const [userTeam, setUserTeam] = useState([]);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('')
   const navigate = useNavigate();
   const remainingPlayers = userTeam.filter(player => !selectedPlayers.includes(player));
 
@@ -17,7 +18,8 @@ const Scoring = () => {
       try {
         const user = auth.currentUser;
         if (!user) {
-          alert('User not authenticated');
+          document.getElementById('message').style.color = 'red'
+          setMessage('User not authenticated')
           return;
         }
 
@@ -30,7 +32,8 @@ const Scoring = () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          alert(`Error fetching user team: ${errorData.message}`);
+          document.getElementById('message').style.color = 'red'
+          setMessage(`Error fetching user team: ${errorData.message}`)
           return;
         }
 
@@ -71,7 +74,8 @@ const Scoring = () => {
         setUserTeam(temp || []);
         setLoading(false);
       } catch (error) {
-        alert(`Error fetching user team: ${error.message}`);
+        document.getElementById('message').style.color = 'red'
+        setMessage(`Error fetching user team: ${error.message}`)
       }
     };
 
@@ -180,7 +184,7 @@ const Scoring = () => {
           </button>
         </div>
       )}
-
+      
       {/* Display the remaining/not selected players outside the Scoring div */}
       
       {!loading && selectedPlayers.length === 5 ? (
@@ -220,7 +224,8 @@ const Scoring = () => {
             <p key={player.id}>{`${player.name}`}</p>
           ))}
         </div>
-      )} */}
+          )*/}
+      <p id="message">{message}</p>
     </div>
   );
 };

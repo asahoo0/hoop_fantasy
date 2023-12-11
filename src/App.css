@@ -4,6 +4,7 @@ body {
     text-shadow: 5px 5px 6px rgba(0, 0, 0, 0.5);
     color: #ffffff;
 }
+
 body::before {
     content: "";
     position: fixed;
@@ -30,9 +31,6 @@ body::before {
     background-color: rgb(38, 129, 159);
 }
 
-.navbar_clicked {
-    background-color: rgb(46,100,12);
-}
 
 nav.primary {
     border: 1px solid black;
@@ -77,6 +75,7 @@ ul {
 div.grid_layout {
     display: grid;
     grid-template-columns: 50% 50%;
+    row-gap: 1em;
 }
 
 .create_team_button {
@@ -93,8 +92,43 @@ button.detail {
     border-style: solid;
 }
 
+label.extra_space {
+    margin-right:1em;
+}
+
+label.player_search {
+    margin-top:1em;
+    margin-right: 1em;
+}
+
+div.player_search{
+    display: grid;
+    grid-template-columns: 30% 50% 20% 20%;
+    
+}
+ul.player_search {
+    margin-bottom: 3em;
+}
+
+div.extra_space {
+    margin:1em;
+}
+
+button.player_search {
+    background-color: rgb(38, 129, 159);
+    color:white;
+    border-radius: 0.5em;
+    margin-right:1em;
+}
+
+button.player_search:disabled {
+    background-color: rgb(192,192,192);
+    color:white;
+    border-radius: 0.5em;
+}
+
 button.standard_button {
-    background-color: rgb(75,159,38);
+    background-color: rgb(38, 129, 159);
     color:white;
     padding: 5%;
     font-size: 1em;

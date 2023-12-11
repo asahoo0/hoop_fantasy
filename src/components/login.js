@@ -8,15 +8,16 @@ import NavBarLogin from './NavBarLogin';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [warning, setWarning] = useState('')
   const navigate = useNavigate();
   const handleLogin = async () => {
     try {
       const auth = getAuth();
       await signInWithEmailAndPassword(auth, email, password);
-      alert('User logged in successfully!');
       navigate("/");
     } catch (error) {
-      alert('Error logging in: ' + error.message);
+      document.getElementById('message').style.color = 'red'
+      setWarning('Invalid Email or Password')
     }
   };
   const [default_username, set_default_username] = useState(false);
@@ -54,6 +55,9 @@ const Login = () => {
           </div>
           <div className="login_column_item">
             <button disabled = {!password || !email} className = "login_column_internal login_signin_button" onClick={handleLogin}>Login</button>
+          </div>
+          <div className="login_column_item">
+            <p id="message">{warning}</p>
           </div>
         </div>
       </div>

@@ -7,10 +7,9 @@ const NavBar =  () => {
     const handleLogout = async () => {
       try {
         await auth.signOut();
-        alert('User logged out successfully!');
         navigate("/login");
       } catch (error) {
-        alert('Error logging out: ' + error.message);
+        console.log('Error logging out: ' + error.message);
       }
     };
 

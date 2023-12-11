@@ -4,11 +4,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase';
 import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
 import NavBar from "./NavBar"
+import PlayerSearch from './PlayerSearch';
 
 const AddToTeam = () => {
   const { leagueId } = useParams();
   const [userTeam, setUserTeam] = useState(null);
   const [playerToAdd, setPlayerToAdd] = useState('');
+  const [message, setMessage] = useState('')
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
   const navigate = useNavigate();
@@ -39,7 +41,8 @@ const AddToTeam = () => {
   
       // Check for valid integer value
       if (isNaN(parseInt(playerToAdd, 10))) {
-        alert('Invalid player ID. Please enter a valid integer player ID.');
+        document.getElementById('message').style.color = 'red'
+        setMessage('Invalid player ID. Please enter a valid integer player ID.')
         return;
       }
   
@@ -56,7 +59,8 @@ const AddToTeam = () => {
   
       // Check for duplicate player ID in other teams in the league
       if (checkDuplicatePlayerInLeague(playersList, playerToAdd)) {
-        alert('Player ID already exists in another team in the league. Please enter a unique player ID.');
+        document.getElementById('message').style.color = 'red'
+        setMessage('Player ID already exists in another team in the league. Please enter a unique player ID.')
         return;
       }
   
@@ -74,7 +78,8 @@ const AddToTeam = () => {
   
       if (!response.ok) {
         const errorData = await response.json();
-        alert(`Error adding player: ${errorData.message}`);
+        document.getElementById('message').style.color = 'red'
+        setMessage(`Error adding player: ${errorData.message}`)
         return;
       }
   
@@ -140,6 +145,7 @@ const AddToTeam = () => {
   return (
     <div>
       <NavBar />
+      <PlayerSearch />
       <div className='main_item'>
       {userTeam ? (
         <div>
@@ -150,11 +156,14 @@ const AddToTeam = () => {
               <li key={index}>{player}</li>
             ))}
           </ul>
-          <label>
-            Player to Add:
+          <div className='extra_space'>
+            <label className='extra_space'>
+              Player to Add:  
+            </label>
             <input type="text" value={playerToAdd} onChange={(e) => setPlayerToAdd(e.target.value)} />
-          </label>
+          </div>
           <button className='standard_button' onClick={handleAddPlayer}>Add Player</button>
+          <p id="message">{message}</p>
         </div>
       ) : (
         <p>Loading team details...</p>

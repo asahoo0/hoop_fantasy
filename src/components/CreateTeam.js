@@ -3,20 +3,27 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase';
 import { collection, addDoc, getDoc, updateDoc, doc } from 'firebase/firestore';
 import NavBar from "./NavBar"
+import axios from 'axios';
+import { filterCurrent } from './id';
+import PlayerSearch from './PlayerSearch';
 
 const CreateTeam = () => {
   const { leagueId } = useParams();
   const [teamName, setTeamName] = useState('');
   const [player, setPlayer] = useState('');
+  const [message, setMessage] = useState('');
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
   const navigate = useNavigate();
-
+  const [searchTerm, setSearchTerm] = useState('');
+  const [players, setPlayers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const handleCreateTeam = async () => {
     try {
       // Validate player input
       if (!player) {
-        alert('Please enter a player ID.');
+        document.getElementById('message').style.color = 'red'
+        setMessage('Please enter a Player ID')
         return;
       }
 
@@ -33,7 +40,8 @@ const CreateTeam = () => {
   
       // Check for duplicate player ID in other teams in the league
       if (checkDuplicatePlayerInLeague(playersList, player)) {
-        alert('Player ID already exists in another team in the league. Please enter a unique player ID.');
+        document.getElementById('message').style.color = 'red'
+        setMessage('Player ID already exists in another team in the league. Please enter a unique player ID.')
         return;
       }
   
@@ -55,7 +63,8 @@ const CreateTeam = () => {
   
       if (!response.ok) {
         const errorData = await response.json();
-        alert(`Error creating team: ${errorData.message}`);
+        document.getElementById('message').style.color = 'red'
+        setMessage(`Error creating team: ${errorData.message}`)
         return;
       }
   
@@ -115,24 +124,37 @@ const CreateTeam = () => {
     }
     return false;
   };
+  const handleSearch = async () => {
+    axios.get(`https://www.balldontlie.io/api/v1/players?search=${searchTerm}&per_page=100`)
+      .then((res)=>{
+        console.log(res.data.data)
+        setPlayers(filterCurrent(res.data.data))
+        setLoading(false);
+      })
+      .catch((error)=>{
+        console.log(error);
+      });
+  };
   
 
   return (
     <div>
       <NavBar />
+      <PlayerSearch />
       <div className='main_item'>
-        <h1>Create Team</h1>
         <div className='grid_layout'>
           <label>
             Team Name:
           </label>
           <input name="team_name" type="text" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
+          
           <label>
             Player ID:
           </label>
           <input name="player_id" type="text" value={player} onChange={(e) => setPlayer(e.target.value)} />
           </div>
           <button disabled = {!player || !teamName} className = "standard_button create_team_button" onClick={handleCreateTeam}>Create Team</button>
+          <p id="message">{message}</p>
       </div>
     </div>
   );
