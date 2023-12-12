@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { auth } from './firebase'; // Adjust the path accordingly
 import Signup from './components/signup';
 import Login from './components/login';
@@ -12,14 +12,11 @@ import CreateTeam from './components/CreateTeam';
 import LeagueDetails from './components/LeagueDetails';
 import AddToTeam from './components/AddToTeam';
 import Leaderboard from './components/Leaderboard';
-import { useNavigate } from 'react-router-dom';
-import NavBar from './components/NavBar';
 import Scoring from './components/Scoring';
 import HomePage from "./components/HomePage"
 
 const App = () => {
   const [user, setUser] = useState(null);
-  const [activeTab, setActiveTab] = useState('signup'); // Added state for active tab
 
   useEffect(() => {
     // Firebase authentication state listener

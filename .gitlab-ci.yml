@@ -22,6 +22,11 @@ pages:
   artifacts:
     paths:
     - public
+  
+  eslint:
+  script:
+    - npm install -g eslint
+    - eslint --max-warnings=0 .
 
   only:
     - main
