@@ -43,7 +43,7 @@ const App = () => {
   }, []); // Empty dependency array ensures this effect runs only once on mount
   
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
         { user ? (
             <Routes>
               <Route path="/" element={<HomePage user={user} />} />
