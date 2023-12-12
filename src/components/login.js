@@ -9,6 +9,9 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [warning, setWarning] = useState('')
   const navigate = useNavigate();
+  const [default_username, set_default_username] = useState(false);
+  const [default_password, set_default_password] = useState(false);
+
   const handleLogin = async () => {
     try {
       const auth = getAuth();
