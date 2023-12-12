@@ -43,7 +43,7 @@ const App = () => {
   }, []); // Empty dependency array ensures this effect runs only once on mount
   
   return (
-    <Router basename={"/final_project_cs_409"}>
+    <Router>
         { user ? (
             <Routes>
               <Route path="/" element={<HomePage user={user} />} />
