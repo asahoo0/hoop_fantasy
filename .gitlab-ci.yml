@@ -2,7 +2,7 @@ image: node:latest
 
 variables:
   CI: "false"
-  PUBLIC_URL: /hoop_fantasy
+  PUBLIC_URL: /final_project_cs_409
 
 cache:
   paths:
