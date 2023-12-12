@@ -14,7 +14,6 @@ const LeagueDetails = () => {
   const [isUserTurn, setIsUserTurn] = useState(false);
   const [draftEnded, setDraftEnded] = useState(false);
   const [teamScored, setTeamScored] = useState(false); // New state for teamScored
-  const [creator, setCreator] = useState('')
   const [joinCode, setJoinCode] = useState('')
   const user = auth.currentUser;
   const userId = user ? user.uid : null;
@@ -23,7 +22,7 @@ const LeagueDetails = () => {
   const [userTeamDetail, setUserTeamDetail] = useState([]);
 
   useEffect(() => {
-    
+
     const fetchData = async () => {
       try {
         const draftResponse = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`);
@@ -35,7 +34,6 @@ const LeagueDetails = () => {
         const draftData = await draftResponse.json();
         setDraftStarted(draftData.data.start || false);
         setDraftEnded(draftData.data.end || false);
-        setCreator(draftData.data.user_ids[0]);
         setJoinCode(draftData.data.join_code)
 
         const isUserTurn = draftData.data.user_ids && draftData.data.user_ids[draftData.data.turn] === userId;
@@ -141,7 +139,7 @@ return (
     <div className="main_item league-details-container">
       <div className="league-details">
         <h2>League Details</h2>
-        {creator == userId && !draftStarted ? (<p>Join Code: {joinCode}</p>):(null)}
+        {isUserTurn && !draftStarted ? (<p>Join Code: {joinCode}</p>):(null)}
         {team ? (  // Check if the user has a team in the league
           <div>
             <p>You have a team in this league.</p>
@@ -205,9 +203,9 @@ return (
                     <p>Draft has not started. You cannot create a team yet. 
                       When the draft starts, you can create your team and draft your first player!
                     </p>
-                    {(
+                    {isUserTurn ? (
                       <button className='standard_button' onClick={handleStartDraft}>Start Draft</button>
-                    )}
+                    ) : (null)}
                   </div>
                 )}
               </>
