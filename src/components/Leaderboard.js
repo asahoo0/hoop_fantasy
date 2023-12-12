@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams} from 'react-router-dom';
 import { auth } from '../firebase';
 
 const Leaderboard = () => {
@@ -7,7 +7,6 @@ const Leaderboard = () => {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('')
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLeaderboard = async () => {

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { db, auth } from '../firebase';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { auth } from '../firebase';
 import NavBar from "./NavBar"
 import PlayerSearch from './PlayerSearch';
 

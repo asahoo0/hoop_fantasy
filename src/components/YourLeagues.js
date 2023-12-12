@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { auth } from '../firebase'; // Adjust the path accordingly
-import { Link } from 'react-router-dom'; // Import Link from React Router
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import NavBar from "./NavBar"
 
