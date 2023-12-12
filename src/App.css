@@ -50,7 +50,10 @@ nav.primary {
 }
 .nav_container2 {
     width:60%;
-    margin-left:auto;
+    margin:0 auto;
+    display: flex;
+    flex-wrap: row;
+    justify-content:center;
 }
 
 p {
