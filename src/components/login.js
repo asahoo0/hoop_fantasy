@@ -1,7 +1,6 @@
 // login.js
 import React, { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import NavBar from './NavBar';
 import { useNavigate } from 'react-router-dom';
 import NavBarLogin from './NavBarLogin';
 
@@ -20,8 +19,6 @@ const Login = () => {
       setWarning('Invalid Email or Password')
     }
   };
-  const [default_username, set_default_username] = useState(false);
-  const [default_password, set_default_password] = useState(false);
 
   const manage_email = (e) => {
     setEmail(e.target.value);

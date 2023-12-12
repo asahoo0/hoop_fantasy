@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import axios from 'axios';
 import { filterCurrent } from './id';
 
 const PlayerSearch = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [players, setPlayers] = useState([]);
-    const [loading, setLoading] = useState(true);
     const handleSearch = async () => {
     axios.get(`https://www.balldontlie.io/api/v1/players?search=${searchTerm}&per_page=100`)
         .then((res)=>{

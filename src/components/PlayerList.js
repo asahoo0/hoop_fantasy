@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import NavBar from './NavBar';
 import { useNavigate } from 'react-router-dom';
 import { filterCurrent } from './id';
@@ -9,7 +8,6 @@ import "./PlayerList.scss"
 const PlayerList = () => {
   const [players, setPlayers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
 
   

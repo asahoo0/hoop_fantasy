@@ -1,6 +1,7 @@
 image: node:latest
 
 variables:
+  CI: "false"
   PUBLIC_URL: /hoop_fantasy
 
 cache:

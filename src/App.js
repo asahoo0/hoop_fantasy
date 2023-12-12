@@ -17,6 +17,7 @@ import HomePage from "./components/HomePage"
 
 const App = () => {
   const [user, setUser] = useState(null);
+  const [activeTab, setActiveTab] = useState('signup'); // Added state for active tab
 
   useEffect(() => {
     // Firebase authentication state listener
