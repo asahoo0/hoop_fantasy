@@ -67,6 +67,8 @@ const Leaderboard = () => {
     fetchLeaderboard();
   }, [leagueId]);
 
+  teams.sort(function(t1, t2){return t2.score - t1.score})
+
   return (
     <div>
       <h2>Leaderboard</h2>

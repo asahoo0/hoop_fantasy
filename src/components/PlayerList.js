@@ -4,6 +4,7 @@ import NavBar from './NavBar';
 import { useNavigate } from 'react-router-dom';
 import { filterCurrent } from './id';
 import "./PlayerList.scss"
+import PlayerSearch from './PlayerSearch';
 
 const PlayerList = () => {
   const [players, setPlayers] = useState([]);
@@ -12,25 +13,25 @@ const PlayerList = () => {
 
   
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   const fetchPlayers = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const response = await axios.get(`https://www.balldontlie.io/api/v1/players?page=${currentPage}&per_page=10`);
-  //       // const response = await axios.get(`https://www.balldontlie.io/api/v1/players?search=`);
-  //       // const response1 = await axios.get('https://www.balldontlie.io/api/v1/season_averages?season=2023')
-  //       // console.log(responsetest)
-  //       // console.log(response1)
-  //       setPlayers(response.data.data);
-  //     } catch (error) {
-  //       console.error('Error fetching players:', error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`https://www.balldontlie.io/api/v1/players?page=${currentPage}&per_page=10`);
+        // const response = await axios.get(`https://www.balldontlie.io/api/v1/players?search=`);
+        // const response1 = await axios.get('https://www.balldontlie.io/api/v1/season_averages?season=2023')
+        // console.log(responsetest)
+        // console.log(response1)
+        setPlayers(response.data.data);
+      } catch (error) {
+        console.error('Error fetching players:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   fetchPlayers();
-  // }, [currentPage]);
+    fetchPlayers();
+  }, [currentPage]);
 
   const formatPlayerName = (player) => {
     return `${player.id}. ${player.first_name} ${player.last_name}`;
@@ -52,14 +53,14 @@ const PlayerList = () => {
       <div className='main_item'>
         <h1>Ball Don't Lie Player List</h1>
         <button className="standard_button" onClick = {() => navigate("/your-leagues")}>Back to Your Leagues</button>
-
+        
           <div class="list">
             {loading ? (
               <div></div>
               // <p>Loading...</p>
             ) : (
               <>
-                <ul>
+                <ul className='main_item'>
                   {players.map(player => (
                     <li key={player.id}>{formatPlayerName(player)}</li>
                   ))}
