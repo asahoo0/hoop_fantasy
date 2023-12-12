@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
-
+import axios from 'axios';
 import { auth } from '../firebase';
-
 import NavBar from "./NavBar"
 import PlayerSearch from './PlayerSearch';
 
