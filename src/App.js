@@ -41,7 +41,8 @@ const App = () => {
     // Set the active tab to 'signup' on component mount
     setActiveTab('signup');
   }, []); // Empty dependency array ensures this effect runs only once on mount
-  
+
+  //<Route path="/player-list/:leagueId" element={<PlayerList />} />
   return (
     <Router basename={process.env.PUBLIC_URL}>
         { user ? (
@@ -50,7 +51,7 @@ const App = () => {
               <Route path="/create-league" element={<CreateLeagueForm />} />
               <Route path="/join-league" element={<JoinLeagueForm />} />
               <Route path="/your-leagues" element={<YourLeagues />} />
-              <Route path="/player-list/:leagueId" element={<PlayerList />} />
+              
               <Route path="/create-team/:leagueId" element={<CreateTeam />} />
               <Route path="/league-details/:leagueId" element={<LeagueDetails />} />
               <Route path="/add-to-team/:leagueId" element={<AddToTeam />} />

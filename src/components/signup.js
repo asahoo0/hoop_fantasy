@@ -25,6 +25,8 @@ const Signup = () => {
       <NavBarLogin />
       <div className='main_item'>
         <h2>Sign Up</h2>
+        <p>Welcome to Hoop Fantasy!</p>
+        <p>To sign up please enter your username and password</p>
         <div>
           <div className="login_signup_box">
             <div className="login_column_item">

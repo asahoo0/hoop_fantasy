@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
+
 import { auth } from '../firebase';
+
 import NavBar from "./NavBar"
 import PlayerSearch from './PlayerSearch';
 
@@ -18,7 +20,7 @@ const AddToTeam = () => {
     const fetchUserTeam = async () => {
       try {
         const response = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/teams/userTeam/${userId}/${leagueId}`);
-        
+
         if (!response.ok) {
           console.error('Error fetching user team:', response.statusText);
           navigate('/your-leagues');
@@ -34,7 +36,9 @@ const AddToTeam = () => {
 
     fetchUserTeam();
   }, [userId, leagueId, navigate]);
-
+  const formatPlayerName = (player) => {
+    return `${player.id}. ${player.first_name} ${player.last_name}`;
+  };
   const handleAddPlayer = async () => {
     try {
   
@@ -140,7 +144,19 @@ const AddToTeam = () => {
     return false;
   };
   
-
+  const fetchPlayer = async (player) => {
+    try {
+      const resplayer = await axios.get(`https://www.balldontlie.io/api/v1/players/${player}`);
+      
+      const info = resplayer.data
+      let content = {id: player, name: `${info.first_name} ${info.last_name}`, team: info.team.full_name, pts: 0, ast: 0, reb: 0, st: 0, blk: 0};
+      console.log(content)
+      return content;
+    } catch (error) {
+      console.error(`Error fetching data for ID ${player}:`, error.message);
+      return {name: "Error"};
+    }
+  }
   return (
     <div>
       <NavBar />
@@ -152,7 +168,8 @@ const AddToTeam = () => {
           <p>Current Team:</p>
           <ul>
             {userTeam.players.map((player, index) => (
-              <li key={index}>{player}</li>
+              
+              <li key={index}>{fetchPlayer(player).name}</li>
             ))}
           </ul>
           <div className='extra_space'>

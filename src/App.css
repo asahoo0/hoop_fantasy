@@ -155,7 +155,6 @@ button.standard_button:disabled {
 button.login_column_internal:disabled {
     background-color:rgb(192,192,192);
     width:30%;
-    height:2em;
     border-radius: 0.5em;
 }
 
@@ -168,9 +167,10 @@ button.login_column_internal:disabled {
 .login_signin_button {
     background-color: rgb(38, 129, 159);
     color:white;
-    padding: 5%;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    height: auto;
     font-size: 1em;
-    
 }
 
 .main_item {
