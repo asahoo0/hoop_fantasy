@@ -7,6 +7,10 @@ const PlayerSearch = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [players, setPlayers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const checkForSearchEnter = async (e) => {
+        if(e.key == 'Enter')
+            await handleSearch();
+    };
     const handleSearch = async () => {
     axios.get(`https://www.balldontlie.io/api/v1/players?search=${searchTerm}&per_page=100`)
         .then((res)=>{
@@ -21,8 +25,8 @@ const PlayerSearch = () => {
     const formatPlayerName = (player) => {
         return `${player.id}. ${player.first_name} ${player.last_name}`;
     };
-    
-    const resetPlayers = () => {
+
+        const resetPlayers = () => {
         setPlayers([]);
         setSearchTerm("");
     }
@@ -37,13 +41,14 @@ const PlayerSearch = () => {
                         type="text"
                         placeholder="Search..."
                         value={searchTerm}
+                        onKeyUp={(e) => checkForSearchEnter(e)}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     <button className='player_search' disabled = {!searchTerm} onClick={handleSearch}>Search</button>
                     <button className='player_search' onClick={resetPlayers}>Clear</button>
                 </div>
             </div>
-            <ul className='player_search'>
+                <ul className='player_search'>
                   {players.map(player => (
                     <li key={player.id}>{formatPlayerName(player)}</li>
                   ))}
