@@ -46,5 +46,6 @@
   "devDependencies": {
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
-  }
+  },
+  "homepage": "https://final-project-cs-409-miorr2-038e591db4e26ddf951841fe34a9d1b3123.gitlab.io/final_project_cs_409"
 }
