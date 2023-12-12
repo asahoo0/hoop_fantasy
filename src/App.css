@@ -175,7 +175,7 @@ button.login_column_internal:disabled {
 
 .main_item {
     margin:0 auto;
-    width:50%;
+    width:70%;
     display: block;
     text-align: center;
 }
@@ -201,47 +201,77 @@ button.league {
     margin-right: 1em;
 }
 .league-details-container {
-    display: flex;
-  }
-  
-  .league-details {
-    flex: 1; /* Take up the available space */
-    margin-right: 20px; /* Adjust the margin as needed */
-  }
-  
-  .leaderboard {
-    flex-basis: 300px; /* Set the width of the leaderboard */
-  }
-  .player-buttons {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .player-buttons button {
-    background-color: rgb(38, 129, 159);
-    color: #fff;
-    border: none;
-    padding: 10px;
-    margin: 5px;
-    cursor: pointer;
-  }
-  
-  .player-buttons button.selected {
-    background-color: rgb(14, 50, 62); /* Highlight color when selected */
-  }
-  
-  .player-buttons button:disabled {
-    background-color: #ccc; /* Disabled button color */
-    cursor: not-allowed;
-  }
-  
-  .player-buttons button:hover {
-    background-color: #2658a4; /* Hover color */
-  }
+display: flex;
+}
 
-  .Scoring {
+.league-details {
+flex: 1; /* Take up the available space */
+margin-right: 20px; /* Adjust the margin as needed */
+}
+
+.leaderboard {
+flex-basis: 300px; /* Set the width of the leaderboard */
+}
+.player-buttons {
+display: flex;
+flex-wrap: wrap;
+}
+
+.player-buttons button {
+background-color: rgb(38, 129, 159);
+color: #fff;
+border: none;
+padding: 10px;
+margin: 5px;
+cursor: pointer;
+border-radius: 10%;
+}
+
+.player-buttons button.selected {
+background-color: rgb(14, 50, 62); /* Highlight color when selected */
+}
+
+.player-buttons button:disabled {
+background-color: #ccc; /* Disabled button color */
+cursor: not-allowed;
+}
+
+.player-buttons button:hover {
+background-color: #2658a4; /* Hover color */
+}
+
+.Scoring {
+display: flex;
+margin: 0 auto;
+width: 90%;
+
+}
+  
+.Scoring button{
+border-radius: 10px;
+
+}
+.customplayer {
+display: flex;
+flex-direction: column;
+}
+.ScoringWrapper {
+    width: 90%;
+    margin: 0 auto;
+}
+.ScoringWrapper h1 {
+    text-align: center;
+}
+  
+.main_item .info {
     display: flex;
-    justify-content: center;
-  }
-  
-  
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.main_item .info .howTo {
+    background-color: rgb(40,40,40);
+    border-radius: 10px;
+    padding: 10px;
+}

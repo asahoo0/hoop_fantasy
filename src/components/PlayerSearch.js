@@ -19,7 +19,7 @@ const PlayerSearch = () => {
         });
     };
     const formatPlayerName = (player) => {
-        return `${player.id}. ${player.first_name} ${player.last_name}`;
+        return `${player.id} ${player.first_name} ${player.last_name}`;
     };
     
     const resetPlayers = () => {
@@ -31,6 +31,7 @@ const PlayerSearch = () => {
         <div className='main_item'>
             <div>
                 <h1>Create Team</h1>
+                <h3>To add a player to your team, search their name below, then type the the ID number next to their name into the "Player to Add" text field and click "Add Player".</h3>
                 <div className='player_search'>
                     <label className='player_search'>Search For Players:</label>
                     <input
@@ -45,7 +46,7 @@ const PlayerSearch = () => {
             </div>
             <ul className='player_search'>
                   {players.map(player => (
-                    <li key={player.id}>{formatPlayerName(player)}</li>
+                    <li key={player.id}><b>{formatPlayerName(player)}</b></li>
                   ))}
             </ul>
         </div>

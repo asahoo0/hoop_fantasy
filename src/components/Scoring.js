@@ -158,74 +158,102 @@ const Scoring = () => {
   };
 
   return (
-    
     <div>
       <NavBar />
-      <h1>Player Scoring</h1>
-      <h2>Select 5 players from your team:</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <div className="Scoring">
-          <div className="player-buttons">
-            {userTeam.map((player) => (
-              <button
-                key={player.id}
-                onClick={() => handlePlayerClick(player)}
-                className={selectedPlayers.includes(player) ? 'selected' : ''}
-              >
-                <h2>{`${player.name}`}</h2>
-                <p>Team: {player.team} <br/>Pts: {player.pts} <br/>Ast: {player.ast}<br/>Reb: {player.reb}<br/>Stl: {player.stl}, Blk: {player.blk}</p>
-              </button>
+      <div className='ScoringWrapper'>
+        
+        <h1>Player Scoring</h1>
+        <h2>Select 5 players from your team:</h2>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          <div className="Scoring">
+            <div className="player-buttons">
+              {userTeam.map((player) => (
+                <button
+                  key={player.id}
+                  onClick={() => handlePlayerClick(player)}
+                  className={selectedPlayers.includes(player) ? 'selected' : ''}
+                >
+                  <h2>{`${player.name}`}</h2>
+                  <p>Team: {player.team} <br/>Pts: {player.pts} <br/>Ast: {player.ast}<br/>Reb: {player.reb}<br/>Stl: {player.stl}, Blk: {player.blk}</p>
+                </button>
+              ))}
+            </div>
+            
+            <button onClick={handleScoringSubmit} disabled={selectedPlayers.length !== 5}>
+              Submit Scoring
+            </button>
+            
+          </div>
+        )}
+        
+        {/* Display the remaining/not selected players outside the Scoring div */}
+        
+        {!loading && selectedPlayers.length === 5 ? (
+          <div className='customplayer'>
+            <h2>Now, select which players to use for your custom player stats: </h2>
+            <div className='selectors'>
+              <div>
+              <b>Points:</b>
+              <br/>
+              <select id="pts" onChange={(e) => console.log(e.target.value)}>
+                  {remainingPlayers.map((player) => (
+                    <option value={player.pts}>{player.name}</option>
+                  ))}
+              </select>
+              </div>
+
+              <div>
+              <b>Assists:</b>
+              <br/>
+              <select id="ast" onChange={(e) => console.log(e.target.value)}>
+                {remainingPlayers.map((player) => (
+                    <option value={player.ast}>{player.name}</option>
+                  ))}
+              </select>
+              </div>
+
+              <div>
+              <b>Rebounds:</b>
+              <br/>
+              <select id="reb" onChange={(e) => console.log(e.target.value)}>
+                {remainingPlayers.map((player) => 
+                    (<option value={player.reb}>{player.name}</option>)
+                  )}
+              </select>
+              </div>
+              <div>
+              <b>Blocks:</b>
+              <br/>
+              <select id="blk" onChange={(e) => console.log(e.target.value)}>
+                  {remainingPlayers.map((player) => 
+                  ( <option value={player.blk}>{player.name}</option>)
+                  )}
+              </select>
+              </div>
+              <div>
+              <b>Steals:</b>
+              <br/>
+              <select id="stl" onChange={(e) => console.log(e.target.value)}>
+                  {remainingPlayers.map((player) => 
+                    (<option value={player.stl}>{player.name}</option>)
+                  )}
+              </select>
+              </div>
+            </div>
+          </div>
+        ): (<div></div>)}
+        {/* {!loading && (
+          <div className="remaining-players">
+            <p>Remaining Players:</p>
+            {remainingPlayers.map((player) => (
+              <p key={player.id}>{`${player.name}`}</p>
             ))}
           </div>
-          <button onClick={handleScoringSubmit} disabled={selectedPlayers.length !== 5}>
-            Submit Scoring
-          </button>
-        </div>
-      )}
-      
-      {/* Display the remaining/not selected players outside the Scoring div */}
-      
-      {!loading && selectedPlayers.length === 5 ? (
-        <div className='customplayer'>
-          <h2>Now, select which players to use for your custom player: </h2>
-          <select id="pts" onChange={(e) => console.log(e.target.value)}>
-              {remainingPlayers.map((player) => (
-                <option value={player.pts}>{player.name}</option>
-              ))}
-          </select>
-          <select id="ast" onChange={(e) => console.log(e.target.value)}>
-            {remainingPlayers.map((player) => (
-                <option value={player.ast}>{player.name}</option>
-              ))}
-          </select>
-          <select id="reb" onChange={(e) => console.log(e.target.value)}>
-            {remainingPlayers.map((player) => 
-                (<option value={player.reb}>{player.name}</option>)
-              )}
-          </select>
-          <select id="blk" onChange={(e) => console.log(e.target.value)}>
-              {remainingPlayers.map((player) => 
-               ( <option value={player.blk}>{player.name}</option>)
-              )}
-          </select>
-          <select id="stl" onChange={(e) => console.log(e.target.value)}>
-              {remainingPlayers.map((player) => 
-                (<option value={player.stl}>{player.name}</option>)
-              )}
-          </select>
-        </div>
-      ): (<div></div>)}
-      {/* {!loading && (
-        <div className="remaining-players">
-          <p>Remaining Players:</p>
-          {remainingPlayers.map((player) => (
-            <p key={player.id}>{`${player.name}`}</p>
-          ))}
-        </div>
-          )*/}
-      <p id="message">{message}</p>
+            )*/}
+        <p id="message">{message}</p>
+      </div>
     </div>
   );
 };
