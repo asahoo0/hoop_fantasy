@@ -89,7 +89,7 @@ button.detail {
     margin: 0.5%;
     width: 15em;
     height: 4em;
-    background-color: rgb(0,128,255);
+    background-color: rgb(38,129,159);
     color:white;
     border-radius: 0.5em;
     border-style: solid;
@@ -275,3 +275,17 @@ flex-direction: column;
     border-radius: 10px;
     padding: 10px;
 }
+  .logout-confirmation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color:  rgb(40,40,40);
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  
+  

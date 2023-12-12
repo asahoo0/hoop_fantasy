@@ -1,20 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebase'; 
+import { auth } from '../firebase';
 
-const NavBar =  () => {
-    const navigate = useNavigate();
-    const handleLogout = async () => {
+const NavBar = () => {
+  const navigate = useNavigate();
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
+
+  const handleLogout = async () => {
+    if (showLogoutConfirmation) {
       try {
         await auth.signOut();
         navigate("/login");
       } catch (error) {
         console.log('Error logging out: ' + error.message);
       }
-    };
+    } else {
+      // Show confirmation dialog
+      setShowLogoutConfirmation(true);
+    }
+  };
 
+  const handleCancelLogout = () => {
+    // Hide confirmation dialog
+    setShowLogoutConfirmation(false);
+  };
 
-    return(
+  return (
     <div>
       <nav className="primary">
         <div className='nav_container'>
@@ -28,9 +39,17 @@ const NavBar =  () => {
           </button>
         </div>
       </nav>
-    </div>
-    );
-}
 
+      {/* Logout confirmation dialog */}
+      {showLogoutConfirmation && (
+        <div className="logout-confirmation">
+          <p>Are you sure you want to logout?</p>
+          <button onClick={handleLogout}>Yes</button>
+          <button onClick={handleCancelLogout}>No</button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default NavBar;
