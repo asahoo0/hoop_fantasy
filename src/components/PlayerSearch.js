@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { filterCurrent } from './id';
+import "./PlayerList.scss"
 
 const PlayerSearch = () => {
     const [searchTerm, setSearchTerm] = useState('');

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import axios from "axios";
 import { auth } from '../firebase';
 import NavBar from "./NavBar"
 import PlayerSearch from './PlayerSearch';
+// import "./PlayerDetails.scss"
 
 const AddToTeam = () => {
   const { leagueId } = useParams();
   const [userTeam, setUserTeam] = useState(null);
+  const [userTeamDetail, setUserTeamDetail] = useState([]);
   const [playerToAdd, setPlayerToAdd] = useState('');
   const [message, setMessage] = useState('')
   const user = auth.currentUser;
@@ -26,6 +28,40 @@ const AddToTeam = () => {
         }
 
         const teamData = await response.json();
+        let temp = []
+        for (const player of teamData.data.players) {
+          try {
+            const resplayer = await axios.get(`https://www.balldontlie.io/api/v1/players/${player}`);
+            
+            const info = resplayer.data
+            // console.log(info)
+            let content = {id: player, name: `${info.first_name} ${info.last_name}`, team: info.team.full_name, pts: 0, ast: 0, reb: 0, st: 0, blk: 0};
+            // console.log(content);
+            temp.push(content);
+          } catch (error) {
+            console.error(`Error fetching data for ID ${player}:`, error.message);
+            // Handle errors if necessary
+          }
+        }
+        try {
+          const playerIdsQueryParam = temp.map((player) => `player_ids[]=${player.id}`).join('&');
+          const resStats = await axios.get(`https://www.balldontlie.io/api/v1/season_averages?season=2023&${playerIdsQueryParam}`);
+          console.log(resStats.data.data);
+          resStats.data.data.forEach(stat => {
+            const playerToUpdate = temp.find(player => player.id === stat.player_id);
+            if (playerToUpdate) {
+              playerToUpdate.pts = stat.pts;
+              playerToUpdate.ast = stat.ast;
+              playerToUpdate.blk = stat.blk;
+              playerToUpdate.stl = stat.stl;
+              playerToUpdate.reb = stat.reb;
+            }
+          })
+        } catch (error) {
+
+        }
+        console.log(temp)
+        setUserTeamDetail(temp || []);
         setUserTeam(teamData.data);
       } catch (error) {
         console.error('Error fetching user team:', error.message);
@@ -150,11 +186,15 @@ const AddToTeam = () => {
         <div>
           <h2>Add to Team</h2>
           <p>Current Team:</p>
-          <ul>
-            {userTeam.players.map((player, index) => (
-              <li key={index}>{player}</li>
+          <div className='currplayersadd'>
+          {/* <ul> */}
+            {userTeamDetail.map((player) => (
+              // <li key={player.id}>
+                <div className='playerinfo'><b>{player.name}</b><br/>{player.team}<br/>(Pts: {player.pts}, Ast: {player.ast}, Reb: {player.reb})</div>
+              // </li>
             ))}
-          </ul>
+          {/* </ul> */}
+          </div>
           <div className='extra_space'>
             <label className='extra_space'>
               Player to Add:  

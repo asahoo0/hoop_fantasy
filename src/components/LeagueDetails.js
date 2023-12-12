@@ -4,6 +4,8 @@ import { auth } from '../firebase';
 import NavBar from './NavBar';
 import Leaderboard from './Leaderboard';
 import Scoring from './Scoring'; // Import the Scoring component
+import axios from 'axios'
+import "./PlayerDetails.scss"
 
 const LeagueDetails = () => {
   const { leagueId } = useParams();
@@ -16,6 +18,7 @@ const LeagueDetails = () => {
   const userId = user ? user.uid : null;
   const navigate = useNavigate();
   const [refreshInterval, setRefreshInterval] = useState(null);
+  const [userTeamDetail, setUserTeamDetail] = useState([]);
 
   useEffect(() => {
     
@@ -40,10 +43,46 @@ const LeagueDetails = () => {
           return;
         }
 
-        const teamsData = await teamsResponse.json();
-        const userTeamInLeague = teamsData.data;
-        setTeamExists(!!userTeamInLeague);
+        const teamData = await teamsResponse.json();
+        const userTeamInLeague = teamData.data;
+        if (!!userTeamInLeague) {
+          let temp = []
+          for (const player of teamData.data.players) {
+            try {
+              const resplayer = await axios.get(`https://www.balldontlie.io/api/v1/players/${player}`);
+              
+              const info = resplayer.data
+              // console.log(info)
+              let content = {id: player, name: `${info.first_name} ${info.last_name}`, team: info.team.full_name, pts: 0, ast: 0, reb: 0, st: 0, blk: 0};
+              // console.log(content);
+              temp.push(content);
+            } catch (error) {
+              console.error(`Error fetching data for ID ${player}:`, error.message);
+              // Handle errors if necessary
+            }
+          }
+          try {
+            const playerIdsQueryParam = temp.map((player) => `player_ids[]=${player.id}`).join('&');
+            const resStats = await axios.get(`https://www.balldontlie.io/api/v1/season_averages?season=2023&${playerIdsQueryParam}`);
+            console.log(resStats.data.data);
+            resStats.data.data.forEach(stat => {
+              const playerToUpdate = temp.find(player => player.id === stat.player_id);
+              if (playerToUpdate) {
+                playerToUpdate.pts = stat.pts;
+                playerToUpdate.ast = stat.ast;
+                playerToUpdate.blk = stat.blk;
+                playerToUpdate.stl = stat.stl;
+                playerToUpdate.reb = stat.reb;
+              }
+            })
+          } catch (error) {
 
+          }
+          console.log(temp)
+          setUserTeamDetail(temp || []);
+        }
+        setTeamExists(!!userTeamInLeague);
+        
         // Check if the team has already scored
         setTeamScored(userTeamInLeague.score > 0);
       } catch (error) {
@@ -130,7 +169,7 @@ return (
                 )}
               </>
             )}
-            {<button className='standard_button' onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>}
+            {/* {<button className='standard_button' onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>} */}
           </div>
         ) : (
           <div>
@@ -159,7 +198,9 @@ return (
                   )
                 ) : (
                   <div>
-                    <p>Draft has not started. You cannot create a team yet.</p>
+                    <p>Draft has not started. You cannot create a team yet. 
+                      When the draft starts, you can create your team and draft your first player!
+                    </p>
                     {(
                       <button className='standard_button' onClick={handleStartDraft}>Start Draft</button>
                     )}
@@ -167,14 +208,28 @@ return (
                 )}
               </>
             )}
-            {<button className='standard_button' onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>}
+            {/* {<button className='standard_button' onClick={() => navigate(`/player-list/${leagueId}`)}>View Player List</button>} */}
           </div>
         )}
       </div>
       <div className="leaderboard">
         <Leaderboard leagueId={leagueId} />
       </div>
+      
     </div>
+    {team ?
+    <div className='currplayerwrapper'>
+    <h2>Your Team</h2>
+    <div className='currplayers'>
+      {userTeamDetail.map((player) => (
+              <div className='playerinfo'>
+                <h3>{player.name}</h3> 
+                <h4>{player.team} </h4>
+                Pts: {player.pts}<br/>Ast: {player.ast}<br/>Reb: {player.reb}
+              </div>
+            ))}
+    </div></div> : <div></div>
+    }
   </div>
 );
 

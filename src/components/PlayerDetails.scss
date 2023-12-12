@@ -1,0 +1,29 @@
+
+.currplayers {
+    margin: 10px auto;
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: rgb(40, 40, 40);
+    width: 70%;
+    border-radius: 20px;
+    padding: 20px 5px;
+    justify-content: space-evenly;
+    
+}
+.currplayersadd {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+}
+.playerinfo {
+    padding: 10px 5px;
+    margin:5px 5px;
+    border-radius: 10px;
+    background-color: rgb(38, 129, 159);
+
+}
+.currplayerwrapper {
+    text-align: center;
+}
