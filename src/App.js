@@ -18,7 +18,6 @@ import HomePage from "./components/HomePage"
 const App = () => {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState('signup'); // Added state for active tab
-
   useEffect(() => {
     // Firebase authentication state listener
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
@@ -44,7 +43,7 @@ const App = () => {
   }, []); // Empty dependency array ensures this effect runs only once on mount
   
   return (
-    <Router>
+    <Router basename={"/final_project_cs_409"}>
         { user ? (
             <Routes>
               <Route path="/" element={<HomePage user={user} />} />
