@@ -46,7 +46,7 @@ const CreateTeam = () => {
       }
   
       // Make a request to your backend API to create a new team
-      const response = await fetch('http://localhost:4000/api/teams', {
+      const response = await fetch('https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/teams', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ const CreateTeam = () => {
       const newTeamId = teamData.data._id; // Adjust based on your actual response structure
   
       // Make a request to update the league document with the new team's ID
-      await fetch(`http://localhost:4000/api/leagues/${leagueId}`, {
+      await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ const CreateTeam = () => {
       });
   
       // Fetch league details to get the updated turn
-      const leagueResponse = await fetch(`http://localhost:4000/api/leagues/${leagueId}`);
+      const leagueResponse = await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`);
       if (!leagueResponse.ok) {
         console.error('Error fetching league details:', leagueResponse.statusText);
         return;
@@ -97,7 +97,7 @@ const CreateTeam = () => {
       // Update the turn based on your conditions
       if (turn < user_ids.length) {
         // Make a request to update the league document with the new turn
-        await fetch(`http://localhost:4000/api/leagues/${leagueId}`, {
+        await fetch(`https://limitless-caverns-43471-220b25c991c2.herokuapp.com/api/leagues/${leagueId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
