@@ -80,7 +80,7 @@ const JoinLeagueForm = () => {
   
       // Now you've successfully joined the league
       document.getElementById('message').style.color = 'lightgreen'
-      setMessage(`You have joined the league successfully! League ID: ${leagueId}`)
+      setMessage(`You have joined the league successfully!`)
       // You can add additional logic or redirect the user after joining the league
     } catch (error) {
       document.getElementById('message').style.color = 'red'

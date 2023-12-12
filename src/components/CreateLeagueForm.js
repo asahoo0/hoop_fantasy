@@ -64,7 +64,7 @@ const CreateLeagueForm = () => {
       });
   
       document.getElementById('message').style.color = 'lightgreen'
-      setMessage([`League created successfully`,<br/>,`ID: ${leagueID}`,<br/>,`Join Code: ${joinCode}`])
+      setMessage([`League created successfully`,<br/>,`Join Code: ${joinCode}`])
     } catch (error) {
       document.getElementById('message').style.color = 'red'
       setMessage(`Error creating league: ${error.message}`)
